@@ -4,5 +4,5 @@ use (
 	./packages/core
 	./packages/dbtool
 	./packages/proto
-	./services/adapterstripe
+	./services/cart
 )

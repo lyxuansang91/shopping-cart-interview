@@ -34,7 +34,7 @@ cleanup() {
 trap cleanup SIGINT SIGTERM
 
 # List of services
-services=(adapterstripe)
+services=(cart)
 
 # Spin up each service
 for s in "${services[@]}"; do

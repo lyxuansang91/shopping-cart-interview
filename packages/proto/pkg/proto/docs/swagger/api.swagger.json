@@ -7,7 +7,7 @@
   },
   "tags": [
     {
-      "name": "adapterstripe.AdapterstripeService"
+      "name": "cart.CartService"
     }
   ],
   "consumes": [
@@ -20,12 +20,12 @@
     "/v1/stripe/health": {
       "get": {
         "summary": "Health check endpoint to verify Stripe adapter service availability and connection status",
-        "operationId": "AdapterstripeService_HealthCheck",
+        "operationId": "CartService_HealthCheck",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/adapterstripeHealthCheckResponse"
+              "$ref": "#/definitions/cartHealthCheckResponse"
             }
           },
           "default": {
@@ -36,19 +36,19 @@
           }
         },
         "tags": [
-          "adapterstripe.AdapterstripeService"
+          "cart.CartService"
         ]
       }
     },
     "/v1/stripe/payment-methods": {
       "get": {
         "summary": "List all available payment methods configured in Stripe",
-        "operationId": "AdapterstripeService_ListPaymentMethods",
+        "operationId": "CartService_ListPaymentMethods",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/adapterstripeListPaymentMethodsResponse"
+              "$ref": "#/definitions/cartListPaymentMethodsResponse"
             }
           },
           "default": {
@@ -59,19 +59,19 @@
           }
         },
         "tags": [
-          "adapterstripe.AdapterstripeService"
+          "cart.CartService"
         ]
       }
     },
     "/v1/stripe/payment-methods/{paymentMethodCode}": {
       "get": {
         "summary": "Get details of a specific payment method by its code identifier",
-        "operationId": "AdapterstripeService_GetPaymentMethod",
+        "operationId": "CartService_GetPaymentMethod",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/adapterstripeGetPaymentMethodResponse"
+              "$ref": "#/definitions/cartGetPaymentMethodResponse"
             }
           },
           "default": {
@@ -91,17 +91,17 @@
           }
         ],
         "tags": [
-          "adapterstripe.AdapterstripeService"
+          "cart.CartService"
         ]
       },
       "delete": {
         "summary": "Delete a payment method permanently from Stripe",
-        "operationId": "AdapterstripeService_DeletePaymentMethod",
+        "operationId": "CartService_DeletePaymentMethod",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/adapterstripeDeletePaymentMethodResponse"
+              "$ref": "#/definitions/cartDeletePaymentMethodResponse"
             }
           },
           "default": {
@@ -121,19 +121,19 @@
           }
         ],
         "tags": [
-          "adapterstripe.AdapterstripeService"
+          "cart.CartService"
         ]
       }
     },
     "/v1/stripe/payment-methods/{paymentMethodCode}/disable": {
       "post": {
         "summary": "Disable a payment method to prevent new transactions",
-        "operationId": "AdapterstripeService_DisablePaymentMethod",
+        "operationId": "CartService_DisablePaymentMethod",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/adapterstripeDisablePaymentMethodResponse"
+              "$ref": "#/definitions/cartDisablePaymentMethodResponse"
             }
           },
           "default": {
@@ -156,24 +156,24 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/AdapterstripeServiceDisablePaymentMethodBody"
+              "$ref": "#/definitions/CartServiceDisablePaymentMethodBody"
             }
           }
         ],
         "tags": [
-          "adapterstripe.AdapterstripeService"
+          "cart.CartService"
         ]
       }
     },
     "/v1/stripe/payment-methods/{paymentMethodCode}/enable": {
       "post": {
         "summary": "Enable a payment method for processing transactions",
-        "operationId": "AdapterstripeService_EnablePaymentMethod",
+        "operationId": "CartService_EnablePaymentMethod",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/adapterstripeEnablePaymentMethodResponse"
+              "$ref": "#/definitions/cartEnablePaymentMethodResponse"
             }
           },
           "default": {
@@ -196,24 +196,24 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/AdapterstripeServiceEnablePaymentMethodBody"
+              "$ref": "#/definitions/CartServiceEnablePaymentMethodBody"
             }
           }
         ],
         "tags": [
-          "adapterstripe.AdapterstripeService"
+          "cart.CartService"
         ]
       }
     },
     "/v1/stripe/payments": {
       "post": {
         "summary": "Create a new payment transaction through Stripe",
-        "operationId": "AdapterstripeService_CreatePayment",
+        "operationId": "CartService_CreatePayment",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/adapterstripeCreatePaymentResponse"
+              "$ref": "#/definitions/cartCreatePaymentResponse"
             }
           },
           "default": {
@@ -229,24 +229,24 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/adapterstripeCreatePaymentRequest"
+              "$ref": "#/definitions/cartCreatePaymentRequest"
             }
           }
         ],
         "tags": [
-          "adapterstripe.AdapterstripeService"
+          "cart.CartService"
         ]
       }
     },
     "/v1/stripe/payments/{paymentId}": {
       "put": {
         "summary": "Update an existing payment transaction in Stripe",
-        "operationId": "AdapterstripeService_UpdatePayment",
+        "operationId": "CartService_UpdatePayment",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/adapterstripeUpdatePaymentResponse"
+              "$ref": "#/definitions/cartUpdatePaymentResponse"
             }
           },
           "default": {
@@ -268,24 +268,24 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/AdapterstripeServiceUpdatePaymentBody"
+              "$ref": "#/definitions/CartServiceUpdatePaymentBody"
             }
           }
         ],
         "tags": [
-          "adapterstripe.AdapterstripeService"
+          "cart.CartService"
         ]
       }
     },
     "/v1/stripe/refunds": {
       "post": {
         "summary": "Create a new refund for a processed payment through Stripe",
-        "operationId": "AdapterstripeService_CreateRefund",
+        "operationId": "CartService_CreateRefund",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/adapterstripeCreateRefundResponse"
+              "$ref": "#/definitions/cartCreateRefundResponse"
             }
           },
           "default": {
@@ -301,24 +301,24 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/adapterstripeCreateRefundRequest"
+              "$ref": "#/definitions/cartCreateRefundRequest"
             }
           }
         ],
         "tags": [
-          "adapterstripe.AdapterstripeService"
+          "cart.CartService"
         ]
       }
     },
     "/v1/stripe/refunds/{refundId}": {
       "put": {
         "summary": "Update an existing refund transaction in Stripe",
-        "operationId": "AdapterstripeService_UpdateRefund",
+        "operationId": "CartService_UpdateRefund",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/adapterstripeUpdateRefundResponse"
+              "$ref": "#/definitions/cartUpdateRefundResponse"
             }
           },
           "default": {
@@ -340,38 +340,38 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/AdapterstripeServiceUpdateRefundBody"
+              "$ref": "#/definitions/CartServiceUpdateRefundBody"
             }
           }
         ],
         "tags": [
-          "adapterstripe.AdapterstripeService"
+          "cart.CartService"
         ]
       }
     }
   },
   "definitions": {
-    "AdapterstripeServiceDisablePaymentMethodBody": {
+    "CartServiceDisablePaymentMethodBody": {
       "type": "object",
       "title": "DisablePaymentMethodRequest is the request for disabling a payment method"
     },
-    "AdapterstripeServiceEnablePaymentMethodBody": {
+    "CartServiceEnablePaymentMethodBody": {
       "type": "object",
       "title": "EnablePaymentMethodRequest is the request for enabling a payment method"
     },
-    "AdapterstripeServiceUpdatePaymentBody": {
+    "CartServiceUpdatePaymentBody": {
       "type": "object",
       "properties": {
         "payment": {
-          "$ref": "#/definitions/adapterstripePayment"
+          "$ref": "#/definitions/cartPayment"
         },
         "webhook": {
-          "$ref": "#/definitions/adapterstripeWebhook"
+          "$ref": "#/definitions/cartWebhook"
         }
       },
       "title": "Update payment messages"
     },
-    "AdapterstripeServiceUpdateRefundBody": {
+    "CartServiceUpdateRefundBody": {
       "type": "object",
       "properties": {
         "partnerRefundId": {
@@ -399,67 +399,67 @@
       },
       "title": "Update refund messages"
     },
-    "adapterstripeCreatePaymentRequest": {
+    "cartCreatePaymentRequest": {
       "type": "object",
       "properties": {
         "payment": {
-          "$ref": "#/definitions/adapterstripePayment"
+          "$ref": "#/definitions/cartPayment"
         }
       },
       "title": "Create payment messages"
     },
-    "adapterstripeCreatePaymentResponse": {
+    "cartCreatePaymentResponse": {
       "type": "object",
       "properties": {
         "payment": {
-          "$ref": "#/definitions/adapterstripePayment"
+          "$ref": "#/definitions/cartPayment"
         }
       }
     },
-    "adapterstripeCreateRefundRequest": {
+    "cartCreateRefundRequest": {
       "type": "object",
       "properties": {
         "payment": {
-          "$ref": "#/definitions/adapterstripePayment",
+          "$ref": "#/definitions/cartPayment",
           "title": "Original payment"
         },
         "refund": {
-          "$ref": "#/definitions/adapterstripeRefund",
+          "$ref": "#/definitions/cartRefund",
           "title": "New refund to create"
         }
       },
       "title": "Create refund messages"
     },
-    "adapterstripeCreateRefundResponse": {
+    "cartCreateRefundResponse": {
       "type": "object",
       "properties": {
         "refund": {
-          "$ref": "#/definitions/adapterstripeRefund"
+          "$ref": "#/definitions/cartRefund"
         }
       }
     },
-    "adapterstripeDeletePaymentMethodResponse": {
+    "cartDeletePaymentMethodResponse": {
       "type": "object",
       "title": "DeletePaymentMethodResponse is the response for deleting a payment method"
     },
-    "adapterstripeDisablePaymentMethodResponse": {
+    "cartDisablePaymentMethodResponse": {
       "type": "object",
       "title": "DisablePaymentMethodResponse is the response for disabling a payment method"
     },
-    "adapterstripeEnablePaymentMethodResponse": {
+    "cartEnablePaymentMethodResponse": {
       "type": "object",
       "title": "EnablePaymentMethodResponse is the response for enabling a payment method"
     },
-    "adapterstripeGetPaymentMethodResponse": {
+    "cartGetPaymentMethodResponse": {
       "type": "object",
       "properties": {
         "paymentMethod": {
-          "$ref": "#/definitions/adapterstripePaymentMethod"
+          "$ref": "#/definitions/cartPaymentMethod"
         }
       },
       "title": "GetPaymentMethodResponse is the response for getting a payment method"
     },
-    "adapterstripeHealthCheckResponse": {
+    "cartHealthCheckResponse": {
       "type": "object",
       "properties": {
         "status": {
@@ -467,20 +467,20 @@
         }
       }
     },
-    "adapterstripeListPaymentMethodsResponse": {
+    "cartListPaymentMethodsResponse": {
       "type": "object",
       "properties": {
         "paymentMethods": {
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/adapterstripePaymentMethod"
+            "$ref": "#/definitions/cartPaymentMethod"
           }
         }
       },
       "title": "ListPaymentMethodsResponse is the response for listing payment methods"
     },
-    "adapterstripePayment": {
+    "cartPayment": {
       "type": "object",
       "properties": {
         "id": {
@@ -524,20 +524,20 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/adapterstripePaymentAttempt"
+            "$ref": "#/definitions/cartPaymentAttempt"
           }
         },
         "refunds": {
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/adapterstripeRefund"
+            "$ref": "#/definitions/cartRefund"
           }
         }
       },
       "title": "Payment represents a payment in the system"
     },
-    "adapterstripePaymentAttempt": {
+    "cartPaymentAttempt": {
       "type": "object",
       "properties": {
         "id": {
@@ -583,7 +583,7 @@
       },
       "title": "PaymentAttempt represents a payment attempt in the system"
     },
-    "adapterstripePaymentMethod": {
+    "cartPaymentMethod": {
       "type": "object",
       "properties": {
         "id": {
@@ -621,7 +621,7 @@
       },
       "title": "PaymentMethod represents a payment method in the system"
     },
-    "adapterstripeRefund": {
+    "cartRefund": {
       "type": "object",
       "properties": {
         "id": {
@@ -652,13 +652,13 @@
           "type": "array",
           "items": {
             "type": "object",
-            "$ref": "#/definitions/adapterstripeRefundAttempt"
+            "$ref": "#/definitions/cartRefundAttempt"
           }
         }
       },
       "title": "Refund represents a refund in the system"
     },
-    "adapterstripeRefundAttempt": {
+    "cartRefundAttempt": {
       "type": "object",
       "properties": {
         "id": {
@@ -692,23 +692,23 @@
       },
       "title": "RefundAttempt represents a refund attempt in the system"
     },
-    "adapterstripeUpdatePaymentResponse": {
+    "cartUpdatePaymentResponse": {
       "type": "object",
       "properties": {
         "payment": {
-          "$ref": "#/definitions/adapterstripePayment"
+          "$ref": "#/definitions/cartPayment"
         }
       }
     },
-    "adapterstripeUpdateRefundResponse": {
+    "cartUpdateRefundResponse": {
       "type": "object",
       "properties": {
         "refund": {
-          "$ref": "#/definitions/adapterstripeRefund"
+          "$ref": "#/definitions/cartRefund"
         }
       }
     },
-    "adapterstripeWebhook": {
+    "cartWebhook": {
       "type": "object",
       "properties": {
         "id": {

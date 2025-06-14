@@ -102,7 +102,7 @@ proto:
 	buf generate
 	@echo "Proto files generated successfully"
 	@echo "Creating softlink for api.swagger.json (for air hot reload, do not commit this file)..."
-	@ln -sf ../../packages/proto/pkg/proto/docs/swagger/api.swagger.json services/adapterstripe/api.swagger.json
+	@ln -sf ../../packages/proto/pkg/proto/docs/swagger/api.swagger.json services/cart/api.swagger.json
 	@make fmt
 
 
@@ -203,11 +203,11 @@ dbtool:
 
 dbtool-migrate:
 	@echo "Running migrations for all services..."
-	@bin/dbtool migrate up --uri "mysql://cinch:cinch@tcp(localhost:3306)/adapterstripe" --services adapterstripe
+	@bin/dbtool migrate up --uri "mysql://cinch:cinch@tcp(localhost:3306)/cart" --services cart
 
 dbtool-seed:
 	@echo "Running seeders for all services..."
-	@bin/dbtool seed --uri "mysql://cinch:cinch@tcp(localhost:3306)/adapterstripe" --services adapterstripe
+	@bin/dbtool seed --uri "mysql://cinch:cinch@tcp(localhost:3306)/cart" --services cart
 
 # Generate Swagger documentation from proto files
 swagger:

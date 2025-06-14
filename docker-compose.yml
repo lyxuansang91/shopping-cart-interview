@@ -52,7 +52,7 @@ services:
       - MYSQL_DATABASE=payments
       - MYSQL_USER=cinch
       - MYSQL_PASSWORD=cinch
-      - MYSQL_MULTIPLE_DATABASES=temporal,temporal_visibility,adapterstripe
+      - MYSQL_MULTIPLE_DATABASES=temporal,temporal_visibility,cart
     ports:
       - "3306:3306"
     networks:
