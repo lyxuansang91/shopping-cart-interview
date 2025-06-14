@@ -1,0 +1,21 @@
+frontend.enableClientVersionCheck:
+  - value: false
+    constraints: {}
+system.enableActivityEagerExecution:
+  - value: true
+    constraints: {}
+history.defaultWorkflowExecutionTimeout:
+  - value: 24h
+    constraints: {}
+limit.maxIDLength:
+  - value: 255
+    constraints: {}
+frontend.workerVersioningDataAPIs:
+  - value: true
+    constraints: {}
+frontend.workerVersioningWorkflowAPIs:
+  - value: true
+    constraints: {}
+worker.buildIdScavengerEnabled:
+  - value: true
+    constraints: {}

@@ -17,6 +17,7 @@ up: down temporal-setup monitoring-setup
 	@docker compose exec -T temporal-admin-tools tctl --ns default namespace describe > /dev/null 2>&1 || \
 		docker compose exec -T temporal-admin-tools tctl --ns default namespace register > /dev/null 2>&1
 	@echo "Running database migrations and seeders..."
+	@make dbtool
 	@make dbtool-migrate
 	@sleep 5
 	@make dbtool-seed
