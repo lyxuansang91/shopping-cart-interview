@@ -1,0 +1,107 @@
+syntax = "proto3";
+
+package billing;
+
+import "billing/common.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/cinchprotocol/cinch-api/packages/proto/pkg/proto/assets/billing";
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Invoices API"
+    version: "1.0"
+    description: "Invoices service API"
+  }
+};
+
+service InvoicesService {
+  // List all invoices for a subscription
+  rpc ListInvoices(ListInvoicesRequest) returns (ListInvoicesResponse) {
+    option (google.api.http) = {get: "/v1/subscriptions/{subscription_id}/invoices"};
+  }
+
+  // Generate invoice manually (optional)
+  rpc GenerateInvoice(GenerateInvoiceRequest) returns (GenerateInvoiceResponse) {
+    option (google.api.http) = {
+      post: "/v1/subscriptions/{subscription_id}/invoices"
+      body: "*"
+    };
+  }
+
+  // Get invoice by ID
+  rpc GetInvoice(GetInvoiceRequest) returns (GetInvoiceResponse) {
+    option (google.api.http) = {get: "/v1/invoices/{invoice_id}"};
+  }
+
+  // Mark invoice as paid
+  rpc MarkInvoiceAsPaid(MarkInvoiceAsPaidRequest) returns (MarkInvoiceAsPaidResponse) {
+    option (google.api.http) = {
+      put: "/v1/invoices/{invoice_id}/pay"
+      body: "*"
+    };
+  }
+
+  // List invoice line items
+  rpc ListInvoiceLineItems(ListInvoiceLineItemsRequest) returns (ListInvoiceLineItemsResponse) {
+    option (google.api.http) = {get: "/v1/invoices/{invoice_id}/line_items"};
+  }
+}
+
+// Invoice model for responses
+message Invoice {
+  string invoice_id = 1;
+  string subscription_id = 2;
+  double total_amount = 3;
+  string status = 4;
+  google.protobuf.Timestamp issued_at = 5;
+  google.protobuf.Timestamp due_at = 6;
+  google.protobuf.Timestamp paid_at = 7;
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp updated_at = 9;
+}
+
+// List invoices
+message ListInvoicesRequest {
+  string subscription_id = 1;
+}
+message ListInvoicesResponse {
+  repeated Invoice invoices = 1;
+}
+
+// Generate invoice
+message GenerateInvoiceRequest {
+  string subscription_id = 1;
+}
+message GenerateInvoiceResponse {
+  string invoice_id = 1;
+  string status = 2;
+  google.protobuf.Timestamp created_at = 3;
+}
+
+// Get invoice
+message GetInvoiceRequest {
+  string invoice_id = 1;
+}
+message GetInvoiceResponse {
+  Invoice invoice = 1;
+}
+
+// Mark invoice as paid
+message MarkInvoiceAsPaidRequest {
+  string invoice_id = 1;
+}
+message MarkInvoiceAsPaidResponse {
+  string invoice_id = 1;
+  string status = 2;
+  google.protobuf.Timestamp paid_at = 3;
+}
+
+// List invoice line items
+message ListInvoiceLineItemsRequest {
+  string invoice_id = 1;
+}
+message ListInvoiceLineItemsResponse {
+  repeated InvoiceLineItem line_items = 1;
+}

@@ -1,0 +1,11 @@
+version: v1beta1
+name: buf.build/cinchprotocol/cinch-api
+
+deps:
+  - buf.build/googleapis/googleapis
+  - buf.build/grpc-ecosystem/grpc-gateway
+build:
+  roots:
+    - assets
+    - google
+    - grpc-gateway

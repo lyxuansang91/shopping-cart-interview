@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package billing;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/cinchprotocol/cinch-api/packages/proto/pkg/proto/assets/billing";
+
+// Shared billing schedule model
+message BillingSchedule {
+  string billing_schedule_id = 1;
+  string name = 2;
+  string description = 3;
+  string interval = 4; // e.g. monthly, quarterly, annually
+  int32 period_value = 5;
+  int32 billing_day = 6;
+  google.protobuf.Timestamp start_date = 7;
+  google.protobuf.Timestamp end_date = 8;
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp updated_at = 10;
+}
+
+// Shared invoice line item model
+message InvoiceLineItem {
+  string id = 1;
+  string invoice_id = 2;
+  string order_id = 3;
+  string description = 4;
+  double amount = 5;
+  bool is_prorated = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+}
+
+// Shared invoice summary model
+message InvoiceSummary {
+  string invoice_id = 1;
+  google.protobuf.Timestamp issued_at = 2;
+  double total_amount = 3;
+  string status = 4;
+}

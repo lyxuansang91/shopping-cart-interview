@@ -1,0 +1,69 @@
+name: Go Tests
+
+on:
+  push:
+    branches: [main]
+    exclude:
+      - "services/payments/**"
+    paths:
+      - "services/**"
+      - "packages/**"
+      - ".github/workflows/go-tests.yml"
+  pull_request:
+    branches: [main]
+    exclude:
+      - "services/payments/**"
+    paths:
+      - "services/**"
+      - "packages/**"
+      - ".github/workflows/go-tests.yml"
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -u root -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+      redis:
+        image: redis:7.0
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+          
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.21"
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y protobuf-compiler
+          go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+          go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+
+      - name: Run tests
+        run: make test-parallel
+        env:
+          GOWORK: off
+          REDIS_URI: 127.0.0.1:6379

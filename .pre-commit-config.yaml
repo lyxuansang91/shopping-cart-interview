@@ -1,0 +1,29 @@
+repos:
+  # Do not allow push to main branch
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.1.0
+    hooks:
+      - id: no-commit-to-branch
+        stages: [pre-commit]
+        always_run: true
+        fail_fast: true
+      - id: check-merge-conflict
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+
+  # Format Go code
+  - repo: https://github.com/tekwizely/pre-commit-golang
+    rev: v1.0.0-rc.1
+    hooks:
+      - id: go-fmt-repo
+      - id: go-imports-repo
+
+  # Run Go tests
+  - repo: local
+    hooks:
+      - id: go-test
+        name: Run Go Tests
+        entry: make test-parallel
+        language: system
+        types: [go]
+        pass_filenames: false

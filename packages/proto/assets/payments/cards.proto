@@ -1,0 +1,153 @@
+syntax = "proto3";
+
+package payments;
+
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/cinchprotocol/cinch-api/packages/proto/pkg/proto/assets/payments";
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Payment Cards API"
+    version: "1.0"
+    description: "Payment card management service for creating, managing, and processing payment card operations including tokenization and secure storage"
+  }
+};
+
+// CardBrand represents the brand/type of a payment card network
+enum CardBrand {
+  // Default value indicating no brand specified
+  CARD_BRAND_UNSPECIFIED = 0;
+  // Visa card brand - most widely accepted payment network
+  CARD_BRAND_VISA = 1;
+  // Mastercard brand - global payment network
+  CARD_BRAND_MASTERCARD = 2;
+  // American Express brand - premium payment network
+  CARD_BRAND_AMERICAN_EXPRESS = 3;
+  // Discover card brand - US-based payment network
+  CARD_BRAND_DISCOVER = 4;
+  // Diners Club brand - international charge card network
+  CARD_BRAND_DINERS_CLUB = 5;
+  // JCB (Japan Credit Bureau) brand - Japanese payment network
+  CARD_BRAND_JCB = 6;
+  // UnionPay brand - Chinese payment network
+  CARD_BRAND_UNIONPAY = 7;
+}
+
+// CardStatus represents the current lifecycle status of a payment card
+enum CardStatus {
+  // Default value indicating no status specified
+  CARD_STATUS_UNSPECIFIED = 0;
+  // Card is pending verification or activation
+  CARD_STATUS_PENDING = 1;
+  // Card is active and available for transactions
+  CARD_STATUS_ACTIVE = 2;
+  // Card is inactive and cannot be used for transactions
+  CARD_STATUS_INACTIVE = 3;
+}
+
+// Card represents a tokenized payment card with secure storage and metadata
+message Card {
+  // Unique identifier for the card (UUID format)
+  string id = 1;
+  // Identifier of the organisation that owns this card (UUID format)
+  string organisation_id = 2;
+  // VGS (Very Good Security) vault token for secure card storage
+  string vgs_vault_token = 3;
+  // Tokenized card number for secure processing
+  string card_number_token = 4;
+  // Tokenized card CVC/CVV code for secure processing
+  string card_cvc_token = 5;
+  // Tokenized card expiration date for secure processing
+  string card_exp_token = 6;
+  // Last four digits of the card number for display purposes
+  string last_four = 7;
+  // Card brand/network (Visa, Mastercard, etc.)
+  CardBrand brand = 8;
+  // Expiration month (1-12)
+  int32 expiry_month = 9;
+  // Expiration year (4-digit format, e.g., 2025)
+  int32 expiry_year = 10;
+  // URL for binding/verifying the card through external verification
+  string bind_card_url = 11;
+  // Current status of the card
+  CardStatus status = 12;
+  // Whether this card is set as the default payment method for the organisation
+  bool is_default = 13;
+  // Timestamp when the card was created (ISO 8601 format)
+  string created_at = 14;
+  // Timestamp when the card was last updated (ISO 8601 format)
+  string updated_at = 15;
+}
+
+// Request message for creating a new payment card
+message CreateCardRequest {
+  // Identifier of the organisation that will own this card (UUID format)
+  string organisation_id = 1;
+}
+
+// Response message containing the newly created payment card with bind URL
+message CreateCardResponse {
+  // The created card entity with generated tokens and bind URL for verification
+  Card card = 1;
+}
+
+// Request message for deleting a payment card
+message DeleteCardRequest {
+  // Unique identifier of the card to delete (UUID format)
+  string card_id = 1;
+}
+
+// Response message for card deletion (empty on success)
+message DeleteCardResponse {}
+
+// Request message for retrieving all cards for an organisation
+message GetCardsRequest {
+  // Identifier of the organisation whose cards to retrieve (UUID format)
+  string organisation_id = 1;
+}
+
+// Response message containing the list of cards for an organisation
+message GetCardsResponse {
+  // List of payment cards associated with the organisation
+  repeated Card cards = 1;
+}
+
+// Request message for setting a card as the default payment method
+message SetDefaultCardRequest {
+  // Unique identifier of the card to set as default (UUID format)
+  string card_id = 1;
+}
+
+// Response message for setting default card (empty on success)
+message SetDefaultCardResponse {}
+
+// CardService provides secure payment card management including tokenization,
+// storage, retrieval, and lifecycle management with VGS integration
+service CardService {
+  // CreateCard initiates the card creation process by generating secure tokens and a bind URL for verification
+  rpc CreateCard(CreateCardRequest) returns (CreateCardResponse) {
+    option (google.api.http) = {
+      post: "/v1/cards"
+      body: "*"
+    };
+  }
+
+  // DeleteCard permanently removes a card from the system and revokes all associated tokens
+  rpc DeleteCard(DeleteCardRequest) returns (DeleteCardResponse) {
+    option (google.api.http) = {delete: "/v1/cards/{card_id}"};
+  }
+
+  // GetCards retrieves all payment cards associated with an organisation
+  rpc GetCards(GetCardsRequest) returns (GetCardsResponse) {
+    option (google.api.http) = {get: "/v1/organisations/{organisation_id}/cards"};
+  }
+
+  // SetDefaultCard designates a specific card as the default payment method for an organisation
+  rpc SetDefaultCard(SetDefaultCardRequest) returns (SetDefaultCardResponse) {
+    option (google.api.http) = {
+      post: "/v1/cards/{card_id}/set-default"
+      body: "*"
+    };
+  }
+}

@@ -1,0 +1,152 @@
+syntax = "proto3";
+
+package organisations;
+
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/cinchprotocol/cinch-api/packages/proto/pkg/proto/assets/organisations";
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Organisations API"
+    version: "1.0"
+    description: "Organisations service API for managing organisation entities, configurations, and lifecycle operations"
+  }
+};
+
+// OrganisationsService provides core organisation functionality including
+// CRUD operations, status management, and configuration handling
+service OrganisationsService {
+  // Health check endpoint to verify service availability and status
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse) {
+    option (google.api.http) = {get: "/v1/organisations/health"};
+  }
+
+  // Get an organisation by its unique identifier
+  rpc GetOrganisation(GetOrganisationRequest) returns (GetOrganisationResponse) {
+    option (google.api.http) = {get: "/v1/organisations/{id}"};
+  }
+
+  // Create a new organisation with configuration and initial status
+  rpc CreateOrganisation(CreateOrganisationRequest) returns (CreateOrganisationResponse) {
+    option (google.api.http) = {
+      post: "/v1/organisations"
+      body: "*"
+    };
+  }
+
+  // Update an existing organisation's configuration and status
+  rpc UpdateOrganisation(UpdateOrganisationRequest) returns (UpdateOrganisationResponse) {
+    option (google.api.http) = {
+      put: "/v1/organisations/{id}"
+      body: "*"
+    };
+  }
+
+  // Enable an organisation, setting its status to active
+  rpc EnableOrganisation(EnableOrganisationRequest) returns (EnableOrganisationResponse) {
+    option (google.api.http) = {
+      post: "/v1/organisations/{id}/enable"
+      body: "*"
+    };
+  }
+
+  // Disable an organisation, setting its status to inactive
+  rpc DisableOrganisation(DisableOrganisationRequest) returns (DisableOrganisationResponse) {
+    option (google.api.http) = {
+      post: "/v1/organisations/{id}/disable"
+      body: "*"
+    };
+  }
+}
+
+// Health check request message - no parameters required
+message HealthCheckRequest {}
+
+// Health check response containing service status information
+message HealthCheckResponse {
+  // Service status indicator (e.g., "healthy", "degraded", "unhealthy")
+  string status = 1;
+}
+
+// Organisation represents an organisation entity in the system with its configuration and metadata
+message Organisation {
+  // Unique identifier for the organisation (UUID stored as BINARY(16) in database)
+  string id = 1;
+  // Organisation configuration data as JSON blob containing custom settings and preferences
+  bytes config = 2;
+  // Current status of the organisation: 'active' for operational, 'inactive' for disabled
+  string status = 3;
+  // Timestamp when the organisation was created (ISO 8601 format)
+  string created_at = 4;
+  // Timestamp when the organisation was last updated (ISO 8601 format)
+  string updated_at = 5;
+  // Timestamp when the organisation was soft-deleted, null if not deleted (ISO 8601 format)
+  string deleted_at = 6;
+}
+
+// Request message for retrieving a specific organisation by ID
+message GetOrganisationRequest {
+  // Unique identifier of the organisation to retrieve (UUID format)
+  string id = 1;
+}
+
+// Response message containing the requested organisation data
+message GetOrganisationResponse {
+  // The organisation entity with all its fields populated
+  Organisation organisation = 1;
+}
+
+// Request message for creating a new organisation
+message CreateOrganisationRequest {
+  // Initial configuration data for the organisation as JSON blob
+  bytes config = 1;
+  // Initial status for the organisation ('active' or 'inactive')
+  string status = 2;
+}
+
+// Response message containing the newly created organisation
+message CreateOrganisationResponse {
+  // The created organisation entity with generated ID and timestamps
+  Organisation organisation = 1;
+}
+
+// Request message for updating an existing organisation
+message UpdateOrganisationRequest {
+  // Unique identifier of the organisation to update (UUID format)
+  string id = 1;
+  // Updated configuration data as JSON blob
+  bytes config = 2;
+  // Updated status ('active' or 'inactive')
+  string status = 3;
+}
+
+// Response message containing the updated organisation data
+message UpdateOrganisationResponse {
+  // The updated organisation entity with new values and updated timestamp
+  Organisation organisation = 1;
+}
+
+// Request message for enabling an organisation (setting status to active)
+message EnableOrganisationRequest {
+  // Unique identifier of the organisation to enable (UUID format)
+  string id = 1;
+}
+
+// Response message containing the enabled organisation
+message EnableOrganisationResponse {
+  // The organisation entity with status set to 'active' and updated timestamp
+  Organisation organisation = 1;
+}
+
+// Request message for disabling an organisation (setting status to inactive)
+message DisableOrganisationRequest {
+  // Unique identifier of the organisation to disable (UUID format)
+  string id = 1;
+}
+
+// Response message containing the disabled organisation
+message DisableOrganisationResponse {
+  // The organisation entity with status set to 'inactive' and updated timestamp
+  Organisation organisation = 1;
+}

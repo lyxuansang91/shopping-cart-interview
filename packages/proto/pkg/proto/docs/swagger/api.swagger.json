@@ -1,0 +1,4405 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Stripe Adapter API",
+    "description": "Stripe payment adapter service API providing integration with Stripe payment processing including payment methods, transactions, and refund management",
+    "version": "1.0"
+  },
+  "tags": [
+    {
+      "name": "adapterstripe.AdapterstripeService"
+    },
+    {
+      "name": "bff.BFFService"
+    },
+    {
+      "name": "billing.BillingsService"
+    },
+    {
+      "name": "billing.BillingSchedulesService"
+    },
+    {
+      "name": "billing.InvoicesService"
+    },
+    {
+      "name": "billing.ItemsService"
+    },
+    {
+      "name": "billing.OrdersService"
+    },
+    {
+      "name": "billing.SubscriptionsService"
+    },
+    {
+      "name": "ledgers.LedgersService"
+    },
+    {
+      "name": "notifications.NotificationsService"
+    },
+    {
+      "name": "organisations.OrganisationsService"
+    },
+    {
+      "name": "payments.CardService"
+    },
+    {
+      "name": "payments.PaymentMethodService"
+    },
+    {
+      "name": "payments.PaymentsService"
+    },
+    {
+      "name": "payments.WebhooksService"
+    },
+    {
+      "name": "payments.RefundService"
+    },
+    {
+      "name": "wallets.WalletsService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/bff": {
+      "post": {
+        "summary": "Create a new BFF record with user and amount information",
+        "operationId": "BFFService_CreateBFF",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/bffCreateBFFResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/bffCreateBFFRequest"
+            }
+          }
+        ],
+        "tags": [
+          "bff.BFFService"
+        ]
+      }
+    },
+    "/v1/bff/health": {
+      "get": {
+        "summary": "Health check endpoint to verify service availability and status",
+        "operationId": "BFFService_HealthCheck",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/bffHealthCheckResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "bff.BFFService"
+        ]
+      }
+    },
+    "/v1/billing": {
+      "post": {
+        "summary": "Create a new billing record for a user with specified amount",
+        "operationId": "BillingsService_CreateBilling",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingCreateBillingResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/billingCreateBillingRequest"
+            }
+          }
+        ],
+        "tags": [
+          "billing.BillingsService"
+        ]
+      }
+    },
+    "/v1/billing/health": {
+      "get": {
+        "summary": "Health check endpoint to verify service availability and status",
+        "operationId": "BillingsService_HealthCheck",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingHealthCheckResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "billing.BillingsService"
+        ]
+      }
+    },
+    "/v1/billing_schedules": {
+      "get": {
+        "summary": "List all billing schedules",
+        "operationId": "BillingSchedulesService_ListBillingSchedules",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingListBillingSchedulesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "billing.BillingSchedulesService"
+        ]
+      },
+      "post": {
+        "summary": "Create a billing schedule",
+        "operationId": "BillingSchedulesService_CreateBillingSchedule",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingCreateBillingScheduleResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/billingCreateBillingScheduleRequest"
+            }
+          }
+        ],
+        "tags": [
+          "billing.BillingSchedulesService"
+        ]
+      }
+    },
+    "/v1/billing_schedules/{billingScheduleId}": {
+      "get": {
+        "summary": "Get billing schedule by ID",
+        "operationId": "BillingSchedulesService_GetBillingSchedule",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingGetBillingScheduleResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "billingScheduleId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "billing.BillingSchedulesService"
+        ]
+      },
+      "delete": {
+        "summary": "Delete billing schedule",
+        "operationId": "BillingSchedulesService_DeleteBillingSchedule",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingDeleteBillingScheduleResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "billingScheduleId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "billing.BillingSchedulesService"
+        ]
+      },
+      "put": {
+        "summary": "Update billing schedule",
+        "operationId": "BillingSchedulesService_UpdateBillingSchedule",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingUpdateBillingScheduleResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "billingScheduleId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BillingSchedulesServiceUpdateBillingScheduleBody"
+            }
+          }
+        ],
+        "tags": [
+          "billing.BillingSchedulesService"
+        ]
+      }
+    },
+    "/v1/cards": {
+      "post": {
+        "summary": "CreateCard initiates the card creation process by generating secure tokens and a bind URL for verification",
+        "operationId": "CardService_CreateCard",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/paymentsCreateCardResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/paymentsCreateCardRequest"
+            }
+          }
+        ],
+        "tags": [
+          "payments.CardService"
+        ]
+      }
+    },
+    "/v1/cards/{cardId}": {
+      "delete": {
+        "summary": "DeleteCard permanently removes a card from the system and revokes all associated tokens",
+        "operationId": "CardService_DeleteCard",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/paymentsDeleteCardResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cardId",
+            "description": "Unique identifier of the card to delete (UUID format)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "payments.CardService"
+        ]
+      }
+    },
+    "/v1/cards/{cardId}/set-default": {
+      "post": {
+        "summary": "SetDefaultCard designates a specific card as the default payment method for an organisation",
+        "operationId": "CardService_SetDefaultCard",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/paymentsSetDefaultCardResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "cardId",
+            "description": "Unique identifier of the card to set as default (UUID format)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CardServiceSetDefaultCardBody"
+            }
+          }
+        ],
+        "tags": [
+          "payments.CardService"
+        ]
+      }
+    },
+    "/v1/invoices/{invoiceId}": {
+      "get": {
+        "summary": "Get invoice by ID",
+        "operationId": "InvoicesService_GetInvoice",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingGetInvoiceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "invoiceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "billing.InvoicesService"
+        ]
+      }
+    },
+    "/v1/invoices/{invoiceId}/line_items": {
+      "get": {
+        "summary": "List invoice line items",
+        "operationId": "InvoicesService_ListInvoiceLineItems",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingListInvoiceLineItemsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "invoiceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "billing.InvoicesService"
+        ]
+      }
+    },
+    "/v1/invoices/{invoiceId}/pay": {
+      "put": {
+        "summary": "Mark invoice as paid",
+        "operationId": "InvoicesService_MarkInvoiceAsPaid",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingMarkInvoiceAsPaidResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "invoiceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/InvoicesServiceMarkInvoiceAsPaidBody"
+            }
+          }
+        ],
+        "tags": [
+          "billing.InvoicesService"
+        ]
+      }
+    },
+    "/v1/items": {
+      "get": {
+        "summary": "List all items",
+        "operationId": "ItemsService_ListItems",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingListItemsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "pageToken",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "billing.ItemsService"
+        ]
+      },
+      "post": {
+        "summary": "Create a new item",
+        "operationId": "ItemsService_CreateItem",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingCreateItemResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/billingCreateItemRequest"
+            }
+          }
+        ],
+        "tags": [
+          "billing.ItemsService"
+        ]
+      }
+    },
+    "/v1/items/{itemId}": {
+      "get": {
+        "summary": "Get item by ID",
+        "operationId": "ItemsService_GetItem",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingGetItemResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "itemId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "billing.ItemsService"
+        ]
+      },
+      "delete": {
+        "summary": "Delete item",
+        "operationId": "ItemsService_DeleteItem",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingDeleteItemResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "itemId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "billing.ItemsService"
+        ]
+      },
+      "put": {
+        "summary": "Update item",
+        "operationId": "ItemsService_UpdateItem",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingUpdateItemResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "itemId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ItemsServiceUpdateItemBody"
+            }
+          }
+        ],
+        "tags": [
+          "billing.ItemsService"
+        ]
+      }
+    },
+    "/v1/notifications": {
+      "post": {
+        "summary": "Create and send a new notification to a user with specified content and amount context",
+        "operationId": "NotificationsService_CreateNotification",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/notificationsCreateNotificationResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/notificationsCreateNotificationRequest"
+            }
+          }
+        ],
+        "tags": [
+          "notifications.NotificationsService"
+        ]
+      }
+    },
+    "/v1/notifications/health": {
+      "get": {
+        "summary": "Health check endpoint to verify service availability and notification delivery status",
+        "operationId": "NotificationsService_HealthCheck",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/notificationsHealthCheckResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "notifications.NotificationsService"
+        ]
+      }
+    },
+    "/v1/orders/{orderId}": {
+      "get": {
+        "summary": "Get order by ID",
+        "operationId": "OrdersService_GetOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingGetOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "billing.OrdersService"
+        ]
+      },
+      "delete": {
+        "summary": "Cancel order",
+        "operationId": "OrdersService_CancelOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingCancelOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "billing.OrdersService"
+        ]
+      },
+      "put": {
+        "summary": "Update order",
+        "operationId": "OrdersService_UpdateOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingUpdateOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OrdersServiceUpdateOrderBody"
+            }
+          }
+        ],
+        "tags": [
+          "billing.OrdersService"
+        ]
+      }
+    },
+    "/v1/organisations": {
+      "post": {
+        "summary": "Create a new organisation with configuration and initial status",
+        "operationId": "OrganisationsService_CreateOrganisation",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/organisationsCreateOrganisationResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/organisationsCreateOrganisationRequest"
+            }
+          }
+        ],
+        "tags": [
+          "organisations.OrganisationsService"
+        ]
+      }
+    },
+    "/v1/organisations/health": {
+      "get": {
+        "summary": "Health check endpoint to verify service availability and status",
+        "operationId": "OrganisationsService_HealthCheck",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/organisationsHealthCheckResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "organisations.OrganisationsService"
+        ]
+      }
+    },
+    "/v1/organisations/{id}": {
+      "get": {
+        "summary": "Get an organisation by its unique identifier",
+        "operationId": "OrganisationsService_GetOrganisation",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/organisationsGetOrganisationResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Unique identifier of the organisation to retrieve (UUID format)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "organisations.OrganisationsService"
+        ]
+      },
+      "put": {
+        "summary": "Update an existing organisation's configuration and status",
+        "operationId": "OrganisationsService_UpdateOrganisation",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/organisationsUpdateOrganisationResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Unique identifier of the organisation to update (UUID format)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OrganisationsServiceUpdateOrganisationBody"
+            }
+          }
+        ],
+        "tags": [
+          "organisations.OrganisationsService"
+        ]
+      }
+    },
+    "/v1/organisations/{id}/disable": {
+      "post": {
+        "summary": "Disable an organisation, setting its status to inactive",
+        "operationId": "OrganisationsService_DisableOrganisation",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/organisationsDisableOrganisationResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Unique identifier of the organisation to disable (UUID format)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OrganisationsServiceDisableOrganisationBody"
+            }
+          }
+        ],
+        "tags": [
+          "organisations.OrganisationsService"
+        ]
+      }
+    },
+    "/v1/organisations/{id}/enable": {
+      "post": {
+        "summary": "Enable an organisation, setting its status to active",
+        "operationId": "OrganisationsService_EnableOrganisation",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/organisationsEnableOrganisationResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Unique identifier of the organisation to enable (UUID format)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OrganisationsServiceEnableOrganisationBody"
+            }
+          }
+        ],
+        "tags": [
+          "organisations.OrganisationsService"
+        ]
+      }
+    },
+    "/v1/organisations/{organisationId}/cards": {
+      "get": {
+        "summary": "GetCards retrieves all payment cards associated with an organisation",
+        "operationId": "CardService_GetCards",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/paymentsGetCardsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "organisationId",
+            "description": "Identifier of the organisation whose cards to retrieve (UUID format)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "payments.CardService"
+        ]
+      }
+    },
+    "/v1/payments": {
+      "post": {
+        "summary": "Create a new payment transaction with user and payment method details",
+        "operationId": "PaymentsService_CreatePayment",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/paymentsCreatePaymentResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/paymentsCreatePaymentRequest"
+            }
+          }
+        ],
+        "tags": [
+          "payments.PaymentsService"
+        ]
+      }
+    },
+    "/v1/payments/health": {
+      "get": {
+        "summary": "Health check endpoint to verify service availability and payment processing status",
+        "operationId": "PaymentsService_HealthCheck",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/paymentsHealthCheckResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "payments.PaymentsService"
+        ]
+      }
+    },
+    "/v1/payments/invoice/{invoiceId}": {
+      "get": {
+        "summary": "List all payment transactions associated with a specific invoice",
+        "operationId": "PaymentsService_ListPaymentsByInvoice",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/paymentsListPaymentsByInvoiceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "invoiceId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "payments.PaymentsService"
+        ]
+      }
+    },
+    "/v1/payments/{paymentId}": {
+      "get": {
+        "summary": "Get a payment transaction by its unique identifier with full details",
+        "operationId": "PaymentsService_GetPayment",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/paymentsGetPaymentResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "paymentId",
+            "description": "Unique identifier of the payment to retrieve (UUID format)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "payments.PaymentsService"
+        ]
+      }
+    },
+    "/v1/payments/{paymentId}/status": {
+      "patch": {
+        "summary": "Update the status of an existing payment transaction",
+        "operationId": "PaymentsService_UpdatePaymentStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/paymentsUpdatePaymentStatusResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "paymentId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PaymentsServiceUpdatePaymentStatusBody"
+            }
+          }
+        ],
+        "tags": [
+          "payments.PaymentsService"
+        ]
+      }
+    },
+    "/v1/stripe/health": {
+      "get": {
+        "summary": "Health check endpoint to verify Stripe adapter service availability and connection status",
+        "operationId": "AdapterstripeService_HealthCheck",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/adapterstripeHealthCheckResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "adapterstripe.AdapterstripeService"
+        ]
+      }
+    },
+    "/v1/stripe/payment-methods": {
+      "get": {
+        "summary": "List all available payment methods configured in Stripe",
+        "operationId": "AdapterstripeService_ListPaymentMethods",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/adapterstripeListPaymentMethodsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "adapterstripe.AdapterstripeService"
+        ]
+      }
+    },
+    "/v1/stripe/payment-methods/{paymentMethodCode}": {
+      "get": {
+        "summary": "Get details of a specific payment method by its code identifier",
+        "operationId": "AdapterstripeService_GetPaymentMethod",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/adapterstripeGetPaymentMethodResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "paymentMethodCode",
+            "description": "VARCHAR(70)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "adapterstripe.AdapterstripeService"
+        ]
+      },
+      "delete": {
+        "summary": "Delete a payment method permanently from Stripe",
+        "operationId": "AdapterstripeService_DeletePaymentMethod",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/adapterstripeDeletePaymentMethodResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "paymentMethodCode",
+            "description": "VARCHAR(70)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "adapterstripe.AdapterstripeService"
+        ]
+      }
+    },
+    "/v1/stripe/payment-methods/{paymentMethodCode}/disable": {
+      "post": {
+        "summary": "Disable a payment method to prevent new transactions",
+        "operationId": "AdapterstripeService_DisablePaymentMethod",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/adapterstripeDisablePaymentMethodResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "paymentMethodCode",
+            "description": "VARCHAR(70)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AdapterstripeServiceDisablePaymentMethodBody"
+            }
+          }
+        ],
+        "tags": [
+          "adapterstripe.AdapterstripeService"
+        ]
+      }
+    },
+    "/v1/stripe/payment-methods/{paymentMethodCode}/enable": {
+      "post": {
+        "summary": "Enable a payment method for processing transactions",
+        "operationId": "AdapterstripeService_EnablePaymentMethod",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/adapterstripeEnablePaymentMethodResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "paymentMethodCode",
+            "description": "VARCHAR(70)",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AdapterstripeServiceEnablePaymentMethodBody"
+            }
+          }
+        ],
+        "tags": [
+          "adapterstripe.AdapterstripeService"
+        ]
+      }
+    },
+    "/v1/stripe/payments": {
+      "post": {
+        "summary": "Create a new payment transaction through Stripe",
+        "operationId": "AdapterstripeService_CreatePayment",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/adapterstripeCreatePaymentResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/adapterstripeCreatePaymentRequest"
+            }
+          }
+        ],
+        "tags": [
+          "adapterstripe.AdapterstripeService"
+        ]
+      }
+    },
+    "/v1/stripe/payments/{paymentId}": {
+      "put": {
+        "summary": "Update an existing payment transaction in Stripe",
+        "operationId": "AdapterstripeService_UpdatePayment",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/adapterstripeUpdatePaymentResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "paymentId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AdapterstripeServiceUpdatePaymentBody"
+            }
+          }
+        ],
+        "tags": [
+          "adapterstripe.AdapterstripeService"
+        ]
+      }
+    },
+    "/v1/stripe/refunds": {
+      "post": {
+        "summary": "Create a new refund for a processed payment through Stripe",
+        "operationId": "AdapterstripeService_CreateRefund",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/adapterstripeCreateRefundResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/adapterstripeCreateRefundRequest"
+            }
+          }
+        ],
+        "tags": [
+          "adapterstripe.AdapterstripeService"
+        ]
+      }
+    },
+    "/v1/stripe/refunds/{refundId}": {
+      "put": {
+        "summary": "Update an existing refund transaction in Stripe",
+        "operationId": "AdapterstripeService_UpdateRefund",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/adapterstripeUpdateRefundResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "refundId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AdapterstripeServiceUpdateRefundBody"
+            }
+          }
+        ],
+        "tags": [
+          "adapterstripe.AdapterstripeService"
+        ]
+      }
+    },
+    "/v1/subscriptions": {
+      "get": {
+        "summary": "List all subscriptions with optional filtering and pagination",
+        "operationId": "SubscriptionsService_ListSubscriptions",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingListSubscriptionsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "billing.SubscriptionsService"
+        ]
+      },
+      "post": {
+        "summary": "Create a new subscription with billing schedule and customer details",
+        "operationId": "SubscriptionsService_CreateSubscription",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingCreateSubscriptionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/billingCreateSubscriptionRequest"
+            }
+          }
+        ],
+        "tags": [
+          "billing.SubscriptionsService"
+        ]
+      }
+    },
+    "/v1/subscriptions/{subscriptionId_1}/invoices": {
+      "get": {
+        "summary": "Get invoice summaries for a subscription",
+        "operationId": "SubscriptionsService_GetSubscriptionInvoices",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingGetSubscriptionInvoicesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "subscriptionId_1",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "billing.SubscriptionsService"
+        ]
+      }
+    },
+    "/v1/subscriptions/{subscriptionId_1}/orders": {
+      "post": {
+        "summary": "Attach orders to a subscription",
+        "operationId": "SubscriptionsService_AttachOrdersToSubscription",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingAttachOrdersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "subscriptionId_1",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SubscriptionsServiceAttachOrdersToSubscriptionBody"
+            }
+          }
+        ],
+        "tags": [
+          "billing.SubscriptionsService"
+        ]
+      }
+    },
+    "/v1/subscriptions/{subscriptionId}": {
+      "get": {
+        "summary": "Get detailed information about a specific subscription by ID",
+        "operationId": "SubscriptionsService_GetSubscription",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingGetSubscriptionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "billing.SubscriptionsService"
+        ]
+      },
+      "delete": {
+        "summary": "Cancel a subscription with optional immediate or end-of-period termination",
+        "operationId": "SubscriptionsService_CancelSubscription",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingCancelSubscriptionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "billing.SubscriptionsService"
+        ]
+      },
+      "put": {
+        "summary": "Update subscription details including billing schedule, pricing, or customer information",
+        "operationId": "SubscriptionsService_UpdateSubscription",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingUpdateSubscriptionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SubscriptionsServiceUpdateSubscriptionBody"
+            }
+          }
+        ],
+        "tags": [
+          "billing.SubscriptionsService"
+        ]
+      }
+    },
+    "/v1/subscriptions/{subscriptionId}/activate": {
+      "post": {
+        "summary": "Activate a previously paused or cancelled subscription to resume billing",
+        "operationId": "SubscriptionsService_ActivateSubscription",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingActivateSubscriptionResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SubscriptionsServiceActivateSubscriptionBody"
+            }
+          }
+        ],
+        "tags": [
+          "billing.SubscriptionsService"
+        ]
+      }
+    },
+    "/v1/subscriptions/{subscriptionId}/invoice": {
+      "post": {
+        "summary": "Manually trigger invoice generation",
+        "operationId": "SubscriptionsService_TriggerInvoiceGeneration",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingTriggerInvoiceGenerationResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SubscriptionsServiceTriggerInvoiceGenerationBody"
+            }
+          }
+        ],
+        "tags": [
+          "billing.SubscriptionsService"
+        ]
+      }
+    },
+    "/v1/subscriptions/{subscriptionId}/invoices": {
+      "get": {
+        "summary": "List all invoices for a subscription",
+        "operationId": "InvoicesService_ListInvoices",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingListInvoicesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "billing.InvoicesService"
+        ]
+      },
+      "post": {
+        "summary": "Generate invoice manually (optional)",
+        "operationId": "InvoicesService_GenerateInvoice",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingGenerateInvoiceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/InvoicesServiceGenerateInvoiceBody"
+            }
+          }
+        ],
+        "tags": [
+          "billing.InvoicesService"
+        ]
+      }
+    },
+    "/v1/subscriptions/{subscriptionId}/orders": {
+      "get": {
+        "summary": "List orders under a subscription",
+        "operationId": "OrdersService_ListOrders",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingListOrdersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "billing.OrdersService"
+        ]
+      },
+      "post": {
+        "summary": "Create an order under a subscription",
+        "operationId": "OrdersService_CreateOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/billingCreateOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OrdersServiceCreateOrderBody"
+            }
+          }
+        ],
+        "tags": [
+          "billing.OrdersService"
+        ]
+      }
+    },
+    "/v1/wallets": {
+      "post": {
+        "summary": "Create a new digital wallet for a user with initial balance setup",
+        "operationId": "WalletsService_CreateWallet",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/walletsCreateWalletResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/walletsCreateWalletRequest"
+            }
+          }
+        ],
+        "tags": [
+          "wallets.WalletsService"
+        ]
+      }
+    },
+    "/v1/wallets/health": {
+      "get": {
+        "summary": "Health check endpoint to verify service availability and wallet system status",
+        "operationId": "WalletsService_HealthCheck",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/walletsHealthCheckResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "wallets.WalletsService"
+        ]
+      }
+    },
+    "/v1/webhooks": {
+      "post": {
+        "summary": "Receive and process a webhook event from an external payment partner",
+        "operationId": "WebhooksService_ReceiveWebhook",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/paymentsReceiveWebhookResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/paymentsReceiveWebhookRequest"
+            }
+          }
+        ],
+        "tags": [
+          "payments.WebhooksService"
+        ]
+      }
+    },
+    "/v1/webhooks/health": {
+      "get": {
+        "summary": "Health check endpoint to verify webhook service availability and processing status",
+        "operationId": "WebhooksService_HealthCheck",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/paymentsHealthCheckResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "payments.WebhooksService"
+        ]
+      }
+    },
+    "/v1/webhooks/partner-code/{partnerCode}": {
+      "get": {
+        "summary": "List webhook events from a partner identified by partner code",
+        "operationId": "WebhooksService_ListWebhooksByPartnerCode",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/paymentsListWebhooksByPartnerCodeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "partnerCode",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "payments.WebhooksService"
+        ]
+      }
+    },
+    "/v1/webhooks/partner/{partnerId}": {
+      "get": {
+        "summary": "List all webhook events received from a specific payment partner",
+        "operationId": "WebhooksService_ListWebhooksByPartner",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/paymentsListWebhooksByPartnerResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "partnerId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "payments.WebhooksService"
+        ]
+      }
+    },
+    "/v1/webhooks/partner/{partnerId}/event/{eventType}": {
+      "get": {
+        "summary": "List webhook events from a partner filtered by specific event type",
+        "operationId": "WebhooksService_ListWebhooksByPartnerAndEventType",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/paymentsListWebhooksByPartnerAndEventTypeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "partnerId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "eventType",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "payments.WebhooksService"
+        ]
+      }
+    },
+    "/v1/webhooks/{webhookId}": {
+      "get": {
+        "summary": "Get details of a specific webhook event by its unique identifier",
+        "operationId": "WebhooksService_GetWebhook",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/paymentsGetWebhookResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "webhookId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "payments.WebhooksService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "AdapterstripeServiceDisablePaymentMethodBody": {
+      "type": "object",
+      "title": "DisablePaymentMethodRequest is the request for disabling a payment method"
+    },
+    "AdapterstripeServiceEnablePaymentMethodBody": {
+      "type": "object",
+      "title": "EnablePaymentMethodRequest is the request for enabling a payment method"
+    },
+    "AdapterstripeServiceUpdatePaymentBody": {
+      "type": "object",
+      "properties": {
+        "payment": {
+          "$ref": "#/definitions/adapterstripePayment"
+        },
+        "webhook": {
+          "$ref": "#/definitions/adapterstripeWebhook"
+        }
+      },
+      "title": "Update payment messages"
+    },
+    "AdapterstripeServiceUpdateRefundBody": {
+      "type": "object",
+      "properties": {
+        "partnerRefundId": {
+          "type": "string",
+          "title": "Stripe refund ID"
+        },
+        "status": {
+          "type": "string"
+        },
+        "eventType": {
+          "type": "string",
+          "title": "Type of webhook event"
+        },
+        "eventId": {
+          "type": "string",
+          "title": "Stripe event ID"
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Additional event metadata"
+        }
+      },
+      "title": "Update refund messages"
+    },
+    "BillingSchedulesServiceUpdateBillingScheduleBody": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "interval": {
+          "type": "string"
+        },
+        "periodValue": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "billingDay": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "title": "Update billing schedule"
+    },
+    "CardServiceSetDefaultCardBody": {
+      "type": "object",
+      "title": "Request message for setting a card as the default payment method"
+    },
+    "InvoicesServiceGenerateInvoiceBody": {
+      "type": "object",
+      "title": "Generate invoice"
+    },
+    "InvoicesServiceMarkInvoiceAsPaidBody": {
+      "type": "object",
+      "title": "Mark invoice as paid"
+    },
+    "ItemsServiceUpdateItemBody": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number",
+          "format": "double"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "isActive": {
+          "type": "boolean"
+        }
+      },
+      "title": "Update item"
+    },
+    "OrdersServiceCreateOrderBody": {
+      "type": "object",
+      "properties": {
+        "itemId": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "title": "Create order"
+    },
+    "OrdersServiceUpdateOrderBody": {
+      "type": "object",
+      "properties": {
+        "itemId": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "title": "Update order"
+    },
+    "OrganisationsServiceDisableOrganisationBody": {
+      "type": "object",
+      "title": "Request message for disabling an organisation (setting status to inactive)"
+    },
+    "OrganisationsServiceEnableOrganisationBody": {
+      "type": "object",
+      "title": "Request message for enabling an organisation (setting status to active)"
+    },
+    "OrganisationsServiceUpdateOrganisationBody": {
+      "type": "object",
+      "properties": {
+        "config": {
+          "type": "string",
+          "format": "byte",
+          "title": "Updated configuration data as JSON blob"
+        },
+        "status": {
+          "type": "string",
+          "title": "Updated status ('active' or 'inactive')"
+        }
+      },
+      "title": "Request message for updating an existing organisation"
+    },
+    "PaymentsServiceUpdatePaymentStatusBody": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "$ref": "#/definitions/paymentsPaymentStatus"
+        }
+      },
+      "title": "Update payment status messages"
+    },
+    "SubscriptionsServiceActivateSubscriptionBody": {
+      "type": "object",
+      "title": "Activate subscription"
+    },
+    "SubscriptionsServiceAttachOrdersToSubscriptionBody": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/billingOrderItem"
+          }
+        },
+        "billingSchedule": {
+          "$ref": "#/definitions/billingBillingSchedule"
+        }
+      }
+    },
+    "SubscriptionsServiceTriggerInvoiceGenerationBody": {
+      "type": "object",
+      "title": "Trigger invoice generation"
+    },
+    "SubscriptionsServiceUpdateSubscriptionBody": {
+      "type": "object",
+      "properties": {
+        "billingInterval": {
+          "type": "string"
+        },
+        "billingStrategy": {
+          "type": "string"
+        },
+        "billingPeriodValue": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "invoiceDay": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "frontLoaded": {
+          "type": "boolean"
+        },
+        "depositAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "isPaygo": {
+          "type": "boolean"
+        }
+      },
+      "title": "Update subscription"
+    },
+    "adapterstripeCreatePaymentRequest": {
+      "type": "object",
+      "properties": {
+        "payment": {
+          "$ref": "#/definitions/adapterstripePayment"
+        }
+      },
+      "title": "Create payment messages"
+    },
+    "adapterstripeCreatePaymentResponse": {
+      "type": "object",
+      "properties": {
+        "payment": {
+          "$ref": "#/definitions/adapterstripePayment"
+        }
+      }
+    },
+    "adapterstripeCreateRefundRequest": {
+      "type": "object",
+      "properties": {
+        "payment": {
+          "$ref": "#/definitions/adapterstripePayment",
+          "title": "Original payment"
+        },
+        "refund": {
+          "$ref": "#/definitions/adapterstripeRefund",
+          "title": "New refund to create"
+        }
+      },
+      "title": "Create refund messages"
+    },
+    "adapterstripeCreateRefundResponse": {
+      "type": "object",
+      "properties": {
+        "refund": {
+          "$ref": "#/definitions/adapterstripeRefund"
+        }
+      }
+    },
+    "adapterstripeDeletePaymentMethodResponse": {
+      "type": "object",
+      "title": "DeletePaymentMethodResponse is the response for deleting a payment method"
+    },
+    "adapterstripeDisablePaymentMethodResponse": {
+      "type": "object",
+      "title": "DisablePaymentMethodResponse is the response for disabling a payment method"
+    },
+    "adapterstripeEnablePaymentMethodResponse": {
+      "type": "object",
+      "title": "EnablePaymentMethodResponse is the response for enabling a payment method"
+    },
+    "adapterstripeGetPaymentMethodResponse": {
+      "type": "object",
+      "properties": {
+        "paymentMethod": {
+          "$ref": "#/definitions/adapterstripePaymentMethod"
+        }
+      },
+      "title": "GetPaymentMethodResponse is the response for getting a payment method"
+    },
+    "adapterstripeHealthCheckResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "adapterstripeListPaymentMethodsResponse": {
+      "type": "object",
+      "properties": {
+        "paymentMethods": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/adapterstripePaymentMethod"
+          }
+        }
+      },
+      "title": "ListPaymentMethodsResponse is the response for listing payment methods"
+    },
+    "adapterstripePayment": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "BINARY(16)"
+        },
+        "paymentMethodId": {
+          "type": "string",
+          "title": "BINARY(16)"
+        },
+        "invoiceId": {
+          "type": "string",
+          "title": "BINARY(16)"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "title": "NUMERIC(12,2)"
+        },
+        "status": {
+          "type": "string",
+          "title": "ENUM('pending', 'paid', 'failed', 'partially_refunded', 'refunded')"
+        },
+        "dueOn": {
+          "type": "string",
+          "title": "DATETIME"
+        },
+        "paidAt": {
+          "type": "string",
+          "title": "DATETIME"
+        },
+        "createdAt": {
+          "type": "string",
+          "title": "DATETIME"
+        },
+        "updatedAt": {
+          "type": "string",
+          "title": "DATETIME"
+        },
+        "attempts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/adapterstripePaymentAttempt"
+          }
+        },
+        "refunds": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/adapterstripeRefund"
+          }
+        }
+      },
+      "title": "Payment represents a payment in the system"
+    },
+    "adapterstripePaymentAttempt": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "BINARY(16)"
+        },
+        "paymentId": {
+          "type": "string",
+          "title": "BINARY(16)"
+        },
+        "paymentMethodId": {
+          "type": "string",
+          "title": "BINARY(16)"
+        },
+        "partnerId": {
+          "type": "string",
+          "title": "BINARY(16)"
+        },
+        "partnerCode": {
+          "type": "string",
+          "title": "VARCHAR(70)"
+        },
+        "status": {
+          "type": "string",
+          "title": "ENUM('pending', 'paid', 'failed', 'partially_refunded', 'refunded')"
+        },
+        "partnerPaymentId": {
+          "type": "string",
+          "title": "Stripe payment ID"
+        },
+        "redirectUrl": {
+          "type": "string",
+          "title": "Optional URL for redirect-based payment flows"
+        },
+        "errorMessage": {
+          "type": "string",
+          "title": "Optional error message if processing failed"
+        },
+        "createdAt": {
+          "type": "string",
+          "title": "DATETIME"
+        }
+      },
+      "title": "PaymentAttempt represents a payment attempt in the system"
+    },
+    "adapterstripePaymentMethod": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "BINARY(16)"
+        },
+        "paymentMethodCode": {
+          "type": "string",
+          "title": "VARCHAR(70)"
+        },
+        "name": {
+          "type": "string",
+          "title": "VARCHAR(255)"
+        },
+        "description": {
+          "type": "string",
+          "title": "TEXT"
+        },
+        "status": {
+          "type": "string",
+          "title": "ENUM('active', 'inactive')"
+        },
+        "createdAt": {
+          "type": "string",
+          "title": "DATETIME"
+        },
+        "updatedAt": {
+          "type": "string",
+          "title": "DATETIME"
+        },
+        "deletedAt": {
+          "type": "string",
+          "title": "DATETIME"
+        }
+      },
+      "title": "PaymentMethod represents a payment method in the system"
+    },
+    "adapterstripeRefund": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "paymentId": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "title": "ISO 8601 date string"
+        },
+        "updatedAt": {
+          "type": "string",
+          "title": "ISO 8601 date string"
+        },
+        "attempts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/adapterstripeRefundAttempt"
+          }
+        }
+      },
+      "title": "Refund represents a refund in the system"
+    },
+    "adapterstripeRefundAttempt": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "refundId": {
+          "type": "string"
+        },
+        "partnerId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "partnerRefundId": {
+          "type": "string",
+          "title": "Stripe refund ID"
+        },
+        "errorMessage": {
+          "type": "string",
+          "title": "Optional error message if processing failed"
+        },
+        "createdAt": {
+          "type": "string",
+          "title": "ISO 8601 date string"
+        },
+        "updatedAt": {
+          "type": "string",
+          "title": "ISO 8601 date string"
+        }
+      },
+      "title": "RefundAttempt represents a refund attempt in the system"
+    },
+    "adapterstripeUpdatePaymentResponse": {
+      "type": "object",
+      "properties": {
+        "payment": {
+          "$ref": "#/definitions/adapterstripePayment"
+        }
+      }
+    },
+    "adapterstripeUpdateRefundResponse": {
+      "type": "object",
+      "properties": {
+        "refund": {
+          "$ref": "#/definitions/adapterstripeRefund"
+        }
+      }
+    },
+    "adapterstripeWebhook": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "partnerPaymentId": {
+          "type": "string"
+        },
+        "partnerEventType": {
+          "type": "string"
+        },
+        "partnerWebhookId": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "headers": {
+          "type": "string",
+          "format": "byte"
+        },
+        "payload": {
+          "type": "string",
+          "format": "byte"
+        }
+      },
+      "title": "Webhook represents a webhook event in the system"
+    },
+    "bffCreateBFFRequest": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "title": "Unique identifier for the user making the request (UUID format)"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "title": "Amount value in the base currency unit (e.g., dollars, not cents)"
+        }
+      },
+      "title": "Request message for creating a new BFF record"
+    },
+    "bffCreateBFFResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "title": "Operation status indicating success or failure (\"success\", \"failed\", \"pending\")"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "title": "Confirmed amount value that was processed"
+        }
+      },
+      "title": "Response message for BFF record creation"
+    },
+    "bffHealthCheckResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "title": "Service status indicator (e.g., \"healthy\", \"degraded\", \"unhealthy\")"
+        }
+      },
+      "title": "Health check response containing service status information"
+    },
+    "billingActivateSubscriptionResponse": {
+      "type": "object",
+      "properties": {
+        "subscriptionId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "billingAttachOrdersResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "orderIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "billingBillingSchedule": {
+      "type": "object",
+      "properties": {
+        "billingScheduleId": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "interval": {
+          "type": "string",
+          "title": "e.g. monthly, quarterly, annually"
+        },
+        "periodValue": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "billingDay": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "title": "Shared billing schedule model"
+    },
+    "billingCancelOrderResponse": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "billingCancelSubscriptionResponse": {
+      "type": "object",
+      "properties": {
+        "subscriptionId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "billingCreateBillingRequest": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "title": "Unique identifier for the user being billed (UUID format)"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "title": "Billing amount in the base currency unit (e.g., dollars, not cents)"
+        }
+      },
+      "title": "Request message for creating a new billing record"
+    },
+    "billingCreateBillingResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "title": "Operation status indicating success or failure (\"success\", \"failed\", \"pending\")"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "title": "Confirmed billing amount that was processed"
+        }
+      },
+      "title": "Response message for billing record creation"
+    },
+    "billingCreateBillingScheduleRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "interval": {
+          "type": "string"
+        },
+        "periodValue": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "billingDay": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "title": "Create billing schedule"
+    },
+    "billingCreateBillingScheduleResponse": {
+      "type": "object",
+      "properties": {
+        "billingScheduleId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "billingCreateItemRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number",
+          "format": "double"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "isActive": {
+          "type": "boolean"
+        }
+      },
+      "title": "Create item"
+    },
+    "billingCreateItemResponse": {
+      "type": "object",
+      "properties": {
+        "item": {
+          "$ref": "#/definitions/billingItem"
+        }
+      }
+    },
+    "billingCreateOrderResponse": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "billingCreateSubscriptionRequest": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "billingInterval": {
+          "type": "string"
+        },
+        "billingStrategy": {
+          "type": "string"
+        },
+        "billingPeriodValue": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "invoiceDay": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "frontLoaded": {
+          "type": "boolean"
+        },
+        "depositAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "isPaygo": {
+          "type": "boolean"
+        }
+      },
+      "title": "Create subscription"
+    },
+    "billingCreateSubscriptionResponse": {
+      "type": "object",
+      "properties": {
+        "subscriptionId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "billingDeleteBillingScheduleResponse": {
+      "type": "object",
+      "properties": {
+        "billingScheduleId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "billingDeleteItemResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "billingGenerateInvoiceResponse": {
+      "type": "object",
+      "properties": {
+        "invoiceId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "billingGetBillingScheduleResponse": {
+      "type": "object",
+      "properties": {
+        "billingSchedule": {
+          "$ref": "#/definitions/billingBillingSchedule"
+        }
+      }
+    },
+    "billingGetInvoiceResponse": {
+      "type": "object",
+      "properties": {
+        "invoice": {
+          "$ref": "#/definitions/billingInvoice"
+        }
+      }
+    },
+    "billingGetItemResponse": {
+      "type": "object",
+      "properties": {
+        "item": {
+          "$ref": "#/definitions/billingItem"
+        }
+      }
+    },
+    "billingGetOrderResponse": {
+      "type": "object",
+      "properties": {
+        "order": {
+          "$ref": "#/definitions/billingOrder"
+        }
+      }
+    },
+    "billingGetSubscriptionInvoicesResponse": {
+      "type": "object",
+      "properties": {
+        "invoices": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/billingInvoiceSummary"
+          }
+        }
+      }
+    },
+    "billingGetSubscriptionResponse": {
+      "type": "object",
+      "properties": {
+        "subscription": {
+          "$ref": "#/definitions/billingSubscription"
+        }
+      }
+    },
+    "billingHealthCheckResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "title": "Service status indicator (e.g., \"healthy\", \"degraded\", \"unhealthy\")"
+        }
+      },
+      "title": "Health check response containing service status information"
+    },
+    "billingInvoice": {
+      "type": "object",
+      "properties": {
+        "invoiceId": {
+          "type": "string"
+        },
+        "subscriptionId": {
+          "type": "string"
+        },
+        "totalAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "status": {
+          "type": "string"
+        },
+        "issuedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "dueAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "paidAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "title": "Invoice model for responses"
+    },
+    "billingInvoiceLineItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "invoiceId": {
+          "type": "string"
+        },
+        "orderId": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double"
+        },
+        "isProrated": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "title": "Shared invoice line item model"
+    },
+    "billingInvoiceSummary": {
+      "type": "object",
+      "properties": {
+        "invoiceId": {
+          "type": "string"
+        },
+        "issuedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "totalAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "status": {
+          "type": "string"
+        }
+      },
+      "title": "Shared invoice summary model"
+    },
+    "billingItem": {
+      "type": "object",
+      "properties": {
+        "itemId": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number",
+          "format": "double"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "isActive": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "title": "Item model for responses"
+    },
+    "billingListBillingSchedulesResponse": {
+      "type": "object",
+      "properties": {
+        "billingSchedules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/billingBillingSchedule"
+          }
+        }
+      }
+    },
+    "billingListInvoiceLineItemsResponse": {
+      "type": "object",
+      "properties": {
+        "lineItems": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/billingInvoiceLineItem"
+          }
+        }
+      }
+    },
+    "billingListInvoicesResponse": {
+      "type": "object",
+      "properties": {
+        "invoices": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/billingInvoice"
+          }
+        }
+      }
+    },
+    "billingListItemsResponse": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/billingItem"
+          }
+        },
+        "nextPageToken": {
+          "type": "string"
+        }
+      }
+    },
+    "billingListOrdersResponse": {
+      "type": "object",
+      "properties": {
+        "orders": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/billingOrder"
+          }
+        }
+      }
+    },
+    "billingListSubscriptionsResponse": {
+      "type": "object",
+      "properties": {
+        "subscriptions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/billingSubscription"
+          }
+        }
+      }
+    },
+    "billingMarkInvoiceAsPaidResponse": {
+      "type": "object",
+      "properties": {
+        "invoiceId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "paidAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "billingOrder": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        },
+        "subscriptionId": {
+          "type": "string"
+        },
+        "itemId": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double"
+        },
+        "description": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "cancelledAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "title": "Order model for responses"
+    },
+    "billingOrderItem": {
+      "type": "object",
+      "properties": {
+        "itemId": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "title": "Order related messages"
+    },
+    "billingSubscription": {
+      "type": "object",
+      "properties": {
+        "subscriptionId": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "billingInterval": {
+          "type": "string"
+        },
+        "billingStrategy": {
+          "type": "string"
+        },
+        "billingPeriodValue": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "invoiceDay": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "frontLoaded": {
+          "type": "boolean"
+        },
+        "depositAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "isPaygo": {
+          "type": "boolean"
+        },
+        "status": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "title": "Subscription model for responses"
+    },
+    "billingTriggerInvoiceGenerationResponse": {
+      "type": "object",
+      "properties": {
+        "invoiceId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "billingUpdateBillingScheduleResponse": {
+      "type": "object",
+      "properties": {
+        "billingSchedule": {
+          "$ref": "#/definitions/billingBillingSchedule"
+        }
+      }
+    },
+    "billingUpdateItemResponse": {
+      "type": "object",
+      "properties": {
+        "item": {
+          "$ref": "#/definitions/billingItem"
+        }
+      }
+    },
+    "billingUpdateOrderResponse": {
+      "type": "object",
+      "properties": {
+        "order": {
+          "$ref": "#/definitions/billingOrder"
+        }
+      }
+    },
+    "billingUpdateSubscriptionResponse": {
+      "type": "object",
+      "properties": {
+        "subscription": {
+          "$ref": "#/definitions/billingSubscription"
+        }
+      }
+    },
+    "ledgersCreateLedgerResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "ledgersHealthCheckResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "notificationsCreateNotificationRequest": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "title": "Unique identifier for the user to receive the notification (UUID format)"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "title": "Amount value associated with the notification context (e.g., payment amount, billing amount)"
+        }
+      },
+      "title": "Request message for creating and sending a notification"
+    },
+    "notificationsCreateNotificationResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "title": "Operation status indicating notification creation and delivery status (\"sent\", \"queued\", \"failed\")"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "title": "Confirmed amount value that was included in the notification"
+        }
+      },
+      "title": "Response message for notification creation and delivery"
+    },
+    "notificationsHealthCheckResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "title": "Service status indicator including notification delivery health (\"healthy\", \"degraded\", \"unhealthy\")"
+        }
+      },
+      "title": "Health check response containing service and delivery channel status information"
+    },
+    "organisationsCreateOrganisationRequest": {
+      "type": "object",
+      "properties": {
+        "config": {
+          "type": "string",
+          "format": "byte",
+          "title": "Initial configuration data for the organisation as JSON blob"
+        },
+        "status": {
+          "type": "string",
+          "title": "Initial status for the organisation ('active' or 'inactive')"
+        }
+      },
+      "title": "Request message for creating a new organisation"
+    },
+    "organisationsCreateOrganisationResponse": {
+      "type": "object",
+      "properties": {
+        "organisation": {
+          "$ref": "#/definitions/organisationsOrganisation",
+          "title": "The created organisation entity with generated ID and timestamps"
+        }
+      },
+      "title": "Response message containing the newly created organisation"
+    },
+    "organisationsDisableOrganisationResponse": {
+      "type": "object",
+      "properties": {
+        "organisation": {
+          "$ref": "#/definitions/organisationsOrganisation",
+          "title": "The organisation entity with status set to 'inactive' and updated timestamp"
+        }
+      },
+      "title": "Response message containing the disabled organisation"
+    },
+    "organisationsEnableOrganisationResponse": {
+      "type": "object",
+      "properties": {
+        "organisation": {
+          "$ref": "#/definitions/organisationsOrganisation",
+          "title": "The organisation entity with status set to 'active' and updated timestamp"
+        }
+      },
+      "title": "Response message containing the enabled organisation"
+    },
+    "organisationsGetOrganisationResponse": {
+      "type": "object",
+      "properties": {
+        "organisation": {
+          "$ref": "#/definitions/organisationsOrganisation",
+          "title": "The organisation entity with all its fields populated"
+        }
+      },
+      "title": "Response message containing the requested organisation data"
+    },
+    "organisationsHealthCheckResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "title": "Service status indicator (e.g., \"healthy\", \"degraded\", \"unhealthy\")"
+        }
+      },
+      "title": "Health check response containing service status information"
+    },
+    "organisationsOrganisation": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Unique identifier for the organisation (UUID stored as BINARY(16) in database)"
+        },
+        "config": {
+          "type": "string",
+          "format": "byte",
+          "title": "Organisation configuration data as JSON blob containing custom settings and preferences"
+        },
+        "status": {
+          "type": "string",
+          "title": "Current status of the organisation: 'active' for operational, 'inactive' for disabled"
+        },
+        "createdAt": {
+          "type": "string",
+          "title": "Timestamp when the organisation was created (ISO 8601 format)"
+        },
+        "updatedAt": {
+          "type": "string",
+          "title": "Timestamp when the organisation was last updated (ISO 8601 format)"
+        },
+        "deletedAt": {
+          "type": "string",
+          "title": "Timestamp when the organisation was soft-deleted, null if not deleted (ISO 8601 format)"
+        }
+      },
+      "title": "Organisation represents an organisation entity in the system with its configuration and metadata"
+    },
+    "organisationsUpdateOrganisationResponse": {
+      "type": "object",
+      "properties": {
+        "organisation": {
+          "$ref": "#/definitions/organisationsOrganisation",
+          "title": "The updated organisation entity with new values and updated timestamp"
+        }
+      },
+      "title": "Response message containing the updated organisation data"
+    },
+    "paymentsCard": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Unique identifier for the card (UUID format)"
+        },
+        "organisationId": {
+          "type": "string",
+          "title": "Identifier of the organisation that owns this card (UUID format)"
+        },
+        "vgsVaultToken": {
+          "type": "string",
+          "title": "VGS (Very Good Security) vault token for secure card storage"
+        },
+        "cardNumberToken": {
+          "type": "string",
+          "title": "Tokenized card number for secure processing"
+        },
+        "cardCvcToken": {
+          "type": "string",
+          "title": "Tokenized card CVC/CVV code for secure processing"
+        },
+        "cardExpToken": {
+          "type": "string",
+          "title": "Tokenized card expiration date for secure processing"
+        },
+        "lastFour": {
+          "type": "string",
+          "title": "Last four digits of the card number for display purposes"
+        },
+        "brand": {
+          "$ref": "#/definitions/paymentsCardBrand",
+          "title": "Card brand/network (Visa, Mastercard, etc.)"
+        },
+        "expiryMonth": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Expiration month (1-12)"
+        },
+        "expiryYear": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Expiration year (4-digit format, e.g., 2025)"
+        },
+        "bindCardUrl": {
+          "type": "string",
+          "title": "URL for binding/verifying the card through external verification"
+        },
+        "status": {
+          "$ref": "#/definitions/paymentsCardStatus",
+          "title": "Current status of the card"
+        },
+        "isDefault": {
+          "type": "boolean",
+          "title": "Whether this card is set as the default payment method for the organisation"
+        },
+        "createdAt": {
+          "type": "string",
+          "title": "Timestamp when the card was created (ISO 8601 format)"
+        },
+        "updatedAt": {
+          "type": "string",
+          "title": "Timestamp when the card was last updated (ISO 8601 format)"
+        }
+      },
+      "title": "Card represents a tokenized payment card with secure storage and metadata"
+    },
+    "paymentsCardBrand": {
+      "type": "string",
+      "enum": [
+        "CARD_BRAND_UNSPECIFIED",
+        "CARD_BRAND_VISA",
+        "CARD_BRAND_MASTERCARD",
+        "CARD_BRAND_AMERICAN_EXPRESS",
+        "CARD_BRAND_DISCOVER",
+        "CARD_BRAND_DINERS_CLUB",
+        "CARD_BRAND_JCB",
+        "CARD_BRAND_UNIONPAY"
+      ],
+      "default": "CARD_BRAND_UNSPECIFIED",
+      "description": "- CARD_BRAND_UNSPECIFIED: Default value indicating no brand specified\n - CARD_BRAND_VISA: Visa card brand - most widely accepted payment network\n - CARD_BRAND_MASTERCARD: Mastercard brand - global payment network\n - CARD_BRAND_AMERICAN_EXPRESS: American Express brand - premium payment network\n - CARD_BRAND_DISCOVER: Discover card brand - US-based payment network\n - CARD_BRAND_DINERS_CLUB: Diners Club brand - international charge card network\n - CARD_BRAND_JCB: JCB (Japan Credit Bureau) brand - Japanese payment network\n - CARD_BRAND_UNIONPAY: UnionPay brand - Chinese payment network",
+      "title": "CardBrand represents the brand/type of a payment card network"
+    },
+    "paymentsCardStatus": {
+      "type": "string",
+      "enum": [
+        "CARD_STATUS_UNSPECIFIED",
+        "CARD_STATUS_PENDING",
+        "CARD_STATUS_ACTIVE",
+        "CARD_STATUS_INACTIVE"
+      ],
+      "default": "CARD_STATUS_UNSPECIFIED",
+      "description": "- CARD_STATUS_UNSPECIFIED: Default value indicating no status specified\n - CARD_STATUS_PENDING: Card is pending verification or activation\n - CARD_STATUS_ACTIVE: Card is active and available for transactions\n - CARD_STATUS_INACTIVE: Card is inactive and cannot be used for transactions",
+      "title": "CardStatus represents the current lifecycle status of a payment card"
+    },
+    "paymentsCreateCardRequest": {
+      "type": "object",
+      "properties": {
+        "organisationId": {
+          "type": "string",
+          "title": "Identifier of the organisation that will own this card (UUID format)"
+        }
+      },
+      "title": "Request message for creating a new payment card"
+    },
+    "paymentsCreateCardResponse": {
+      "type": "object",
+      "properties": {
+        "card": {
+          "$ref": "#/definitions/paymentsCard",
+          "title": "The created card entity with generated tokens and bind URL for verification"
+        }
+      },
+      "title": "Response message containing the newly created payment card with bind URL"
+    },
+    "paymentsCreatePaymentRequest": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "title": "Unique identifier for the user initiating the payment (UUID format)"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "title": "Payment amount in the base currency unit (e.g., dollars, not cents)"
+        },
+        "paymentMethodCode": {
+          "type": "string",
+          "title": "Code identifying the payment method to use for this transaction"
+        },
+        "invoiceId": {
+          "type": "string",
+          "title": "Unique identifier of the invoice this payment is for (UUID format)"
+        }
+      },
+      "title": "Request message for creating a new payment transaction"
+    },
+    "paymentsCreatePaymentResponse": {
+      "type": "object",
+      "properties": {
+        "paymentId": {
+          "type": "string",
+          "title": "Unique identifier of the created payment transaction (UUID format)"
+        },
+        "status": {
+          "$ref": "#/definitions/paymentsPaymentStatus",
+          "title": "Current status of the payment transaction"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "title": "Confirmed payment amount that was processed"
+        },
+        "createdAt": {
+          "type": "string",
+          "title": "Timestamp when the payment was created (ISO 8601 format)"
+        }
+      },
+      "title": "Response message containing the created payment transaction details"
+    },
+    "paymentsCreateRefundResponse": {
+      "type": "object",
+      "properties": {
+        "refund": {
+          "$ref": "#/definitions/paymentsRefund"
+        }
+      },
+      "title": "CreateRefundResponse represents a response to creating a refund"
+    },
+    "paymentsDeleteCardResponse": {
+      "type": "object",
+      "title": "Response message for card deletion (empty on success)"
+    },
+    "paymentsGetCardsResponse": {
+      "type": "object",
+      "properties": {
+        "cards": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/paymentsCard"
+          },
+          "title": "List of payment cards associated with the organisation"
+        }
+      },
+      "title": "Response message containing the list of cards for an organisation"
+    },
+    "paymentsGetPaymentMethodResponse": {
+      "type": "object",
+      "properties": {
+        "paymentMethod": {
+          "$ref": "#/definitions/paymentsPaymentMethod"
+        }
+      },
+      "title": "GetPaymentMethodResponse represents a response to getting a payment method"
+    },
+    "paymentsGetPaymentResponse": {
+      "type": "object",
+      "properties": {
+        "paymentId": {
+          "type": "string",
+          "title": "Unique identifier of the payment transaction (UUID format)"
+        },
+        "paymentMethodId": {
+          "type": "string",
+          "title": "Identifier of the payment method used for this transaction (UUID format)"
+        },
+        "invoiceId": {
+          "type": "string",
+          "title": "Identifier of the invoice this payment is associated with (UUID format)"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "title": "Payment amount in the base currency unit"
+        },
+        "status": {
+          "$ref": "#/definitions/paymentsPaymentStatus",
+          "title": "Current status of the payment transaction"
+        },
+        "dueOn": {
+          "type": "string",
+          "title": "Due date for the payment (ISO 8601 format)"
+        },
+        "paidAt": {
+          "type": "string",
+          "title": "Timestamp when the payment was completed, null if not yet paid (ISO 8601 format)"
+        },
+        "createdAt": {
+          "type": "string",
+          "title": "Timestamp when the payment was created (ISO 8601 format)"
+        },
+        "updatedAt": {
+          "type": "string",
+          "title": "Timestamp when the payment was last updated (ISO 8601 format)"
+        }
+      },
+      "title": "Response message containing complete payment transaction details"
+    },
+    "paymentsGetRefundResponse": {
+      "type": "object",
+      "properties": {
+        "refund": {
+          "$ref": "#/definitions/paymentsRefund"
+        }
+      },
+      "title": "GetRefundResponse represents a response to getting a refund"
+    },
+    "paymentsGetWebhookResponse": {
+      "type": "object",
+      "properties": {
+        "webhookId": {
+          "type": "string"
+        },
+        "partnerId": {
+          "type": "string"
+        },
+        "partnerWebhookId": {
+          "type": "string"
+        },
+        "partnerEventType": {
+          "type": "string"
+        },
+        "partnerPaymentId": {
+          "type": "string"
+        },
+        "partnerRefundId": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "headers": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "type": "string",
+          "format": "byte"
+        },
+        "receivedAt": {
+          "type": "string",
+          "title": "ISO 8601 date string"
+        },
+        "processedAt": {
+          "type": "string",
+          "title": "ISO 8601 date string, optional"
+        },
+        "createdAt": {
+          "type": "string",
+          "title": "ISO 8601 date string"
+        },
+        "updatedAt": {
+          "type": "string",
+          "title": "ISO 8601 date string"
+        }
+      }
+    },
+    "paymentsHealthCheckResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "title": "Service status indicator (e.g., \"healthy\", \"degraded\", \"unhealthy\")"
+        }
+      },
+      "title": "Health check response containing service status information"
+    },
+    "paymentsListPaymentMethodsResponse": {
+      "type": "object",
+      "properties": {
+        "paymentMethods": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/paymentsPaymentMethod"
+          }
+        }
+      },
+      "title": "ListPaymentMethodsResponse represents a response to listing payment methods"
+    },
+    "paymentsListPaymentsByInvoiceResponse": {
+      "type": "object",
+      "properties": {
+        "payments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/paymentsGetPaymentResponse"
+          }
+        }
+      }
+    },
+    "paymentsListRefundsByPaymentResponse": {
+      "type": "object",
+      "properties": {
+        "refunds": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/paymentsRefund"
+          }
+        }
+      },
+      "title": "ListRefundsByPaymentResponse represents a response to listing refunds by\npayment ID"
+    },
+    "paymentsListWebhooksByPartnerAndEventTypeResponse": {
+      "type": "object",
+      "properties": {
+        "webhooks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/paymentsGetWebhookResponse"
+          }
+        }
+      }
+    },
+    "paymentsListWebhooksByPartnerCodeResponse": {
+      "type": "object",
+      "properties": {
+        "webhooks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/paymentsGetWebhookResponse"
+          }
+        }
+      }
+    },
+    "paymentsListWebhooksByPartnerResponse": {
+      "type": "object",
+      "properties": {
+        "webhooks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/paymentsGetWebhookResponse"
+          }
+        }
+      }
+    },
+    "paymentsPaymentMethod": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "paymentMethodCode": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/paymentsPaymentMethodStatus"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "deletedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "title": "PaymentMethod represents a payment method"
+    },
+    "paymentsPaymentMethodStatus": {
+      "type": "string",
+      "enum": [
+        "PAYMENT_METHOD_STATUS_UNSPECIFIED",
+        "PAYMENT_METHOD_STATUS_ACTIVE",
+        "PAYMENT_METHOD_STATUS_INACTIVE"
+      ],
+      "default": "PAYMENT_METHOD_STATUS_UNSPECIFIED",
+      "title": "PaymentMethodStatus represents the status of a payment method"
+    },
+    "paymentsPaymentStatus": {
+      "type": "string",
+      "enum": [
+        "PAYMENT_STATUS_UNSPECIFIED",
+        "PAYMENT_STATUS_PENDING",
+        "PAYMENT_STATUS_COMPLETED",
+        "PAYMENT_STATUS_FAILED"
+      ],
+      "default": "PAYMENT_STATUS_UNSPECIFIED",
+      "description": "- PAYMENT_STATUS_UNSPECIFIED: Default value indicating no status specified\n - PAYMENT_STATUS_PENDING: Payment has been initiated but not yet processed or confirmed\n - PAYMENT_STATUS_COMPLETED: Payment has been successfully processed and funds transferred\n - PAYMENT_STATUS_FAILED: Payment processing failed due to insufficient funds, invalid details, or other errors",
+      "title": "Payment status enum representing the current state of a payment transaction"
+    },
+    "paymentsReceiveWebhookRequest": {
+      "type": "object",
+      "properties": {
+        "partnerId": {
+          "type": "string"
+        },
+        "partnerWebhookId": {
+          "type": "string"
+        },
+        "partnerEventType": {
+          "type": "string"
+        },
+        "partnerPaymentId": {
+          "type": "string"
+        },
+        "partnerRefundId": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "headers": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "type": "string",
+          "format": "byte"
+        }
+      },
+      "title": "Receive webhook messages"
+    },
+    "paymentsReceiveWebhookResponse": {
+      "type": "object",
+      "properties": {
+        "webhookId": {
+          "type": "string"
+        }
+      }
+    },
+    "paymentsRefund": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "paymentId": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/paymentsRefundStatus"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "title": "Refund represents a refund in the system"
+    },
+    "paymentsRefundStatus": {
+      "type": "string",
+      "enum": [
+        "REFUND_STATUS_UNSPECIFIED",
+        "REFUND_STATUS_PENDING",
+        "REFUND_STATUS_COMPLETED",
+        "REFUND_STATUS_FAILED"
+      ],
+      "default": "REFUND_STATUS_UNSPECIFIED",
+      "title": "RefundStatus represents the status of a refund"
+    },
+    "paymentsSetDefaultCardResponse": {
+      "type": "object",
+      "title": "Response message for setting default card (empty on success)"
+    },
+    "paymentsUpdatePaymentStatusResponse": {
+      "type": "object",
+      "properties": {
+        "paymentId": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/paymentsPaymentStatus"
+        },
+        "updatedAt": {
+          "type": "string",
+          "title": "ISO 8601 date string"
+        }
+      }
+    },
+    "paymentsUpdateRefundStatusResponse": {
+      "type": "object",
+      "properties": {
+        "refund": {
+          "$ref": "#/definitions/paymentsRefund"
+        }
+      },
+      "title": "UpdateRefundStatusResponse represents a response to updating a refund status"
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "walletsCreateWalletRequest": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "title": "Unique identifier for the user who will own this wallet (UUID format)"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "title": "Initial balance amount to set in the wallet (base currency unit, e.g., dollars not cents)"
+        }
+      },
+      "title": "Request message for creating a new digital wallet"
+    },
+    "walletsCreateWalletResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "title": "Operation status indicating wallet creation success or failure (\"created\", \"failed\", \"pending\")"
+        },
+        "amount": {
+          "type": "number",
+          "format": "double",
+          "title": "Confirmed initial balance amount set in the wallet"
+        }
+      },
+      "title": "Response message for wallet creation operation"
+    },
+    "walletsHealthCheckResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "title": "Service status indicator including wallet backend health (\"healthy\", \"degraded\", \"unhealthy\")"
+        }
+      },
+      "title": "Health check response containing service status and wallet system health"
+    }
+  }
+}

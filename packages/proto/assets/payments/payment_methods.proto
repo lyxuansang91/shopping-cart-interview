@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package payments;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/cinchprotocol/cinch-api/packages/proto/pkg/proto/assets/payments";
+
+// PaymentMethodStatus represents the status of a payment method
+enum PaymentMethodStatus {
+  PAYMENT_METHOD_STATUS_UNSPECIFIED = 0;
+  PAYMENT_METHOD_STATUS_ACTIVE = 1;
+  PAYMENT_METHOD_STATUS_INACTIVE = 2;
+}
+
+// PaymentMethod represents a payment method
+message PaymentMethod {
+  string id = 1;
+  string payment_method_code = 2;
+  string name = 3;
+  string description = 4;
+  PaymentMethodStatus status = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
+  google.protobuf.Timestamp deleted_at = 8;
+}
+
+// GetPaymentMethodRequest represents a request to get a payment method
+message GetPaymentMethodRequest {
+  string id = 1;
+}
+
+// GetPaymentMethodResponse represents a response to getting a payment method
+message GetPaymentMethodResponse {
+  PaymentMethod payment_method = 1;
+}
+
+// ListPaymentMethodsRequest represents a request to list payment methods
+message ListPaymentMethodsRequest {
+  // Optional filters can be added here
+}
+
+// ListPaymentMethodsResponse represents a response to listing payment methods
+message ListPaymentMethodsResponse {
+  repeated PaymentMethod payment_methods = 1;
+}
+
+// PaymentMethodService provides methods for managing payment methods
+service PaymentMethodService {
+  // GetPaymentMethod retrieves a payment method by ID
+  rpc GetPaymentMethod(GetPaymentMethodRequest) returns (GetPaymentMethodResponse) {}
+  // ListPaymentMethods lists all active payment methods
+  rpc ListPaymentMethods(ListPaymentMethodsRequest) returns (ListPaymentMethodsResponse) {}
+}

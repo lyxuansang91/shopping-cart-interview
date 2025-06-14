@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package billing;
+
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/cinchprotocol/cinch-api/packages/proto/pkg/proto/assets/billing";
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Billing API"
+    version: "1.0"
+    description: "Core billing service API for managing billing operations, records, and financial transactions"
+  }
+};
+
+// BillingsService provides core billing functionality for managing billing records,
+// processing financial transactions, and handling billing-related operations
+service BillingsService {
+  // Health check endpoint to verify service availability and status
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse) {
+    option (google.api.http) = {get: "/v1/billing/health"};
+  }
+
+  // Create a new billing record for a user with specified amount
+  rpc CreateBilling(CreateBillingRequest) returns (CreateBillingResponse) {
+    option (google.api.http) = {
+      post: "/v1/billing"
+      body: "*"
+    };
+  }
+}
+
+// Health check request message - no parameters required
+message HealthCheckRequest {}
+
+// Health check response containing service status information
+message HealthCheckResponse {
+  // Service status indicator (e.g., "healthy", "degraded", "unhealthy")
+  string status = 1;
+}
+
+// Request message for creating a new billing record
+message CreateBillingRequest {
+  // Unique identifier for the user being billed (UUID format)
+  string user_id = 1;
+  // Billing amount in the base currency unit (e.g., dollars, not cents)
+  double amount = 2;
+}
+
+// Response message for billing record creation
+message CreateBillingResponse {
+  // Operation status indicating success or failure ("success", "failed", "pending")
+  string status = 1;
+  // Confirmed billing amount that was processed
+  double amount = 2;
+}

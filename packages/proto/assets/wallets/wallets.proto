@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package wallets;
+
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option go_package = "github.com/cinchprotocol/cinch-api/packages/proto/pkg/proto/assets/wallets";
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Wallets API"
+    version: "1.0"
+    description: "Digital wallet management service API for creating, managing user wallets, balance tracking, and financial account operations"
+  }
+};
+
+// WalletsService provides digital wallet functionality including wallet creation,
+// balance management, transaction tracking, and account operations
+service WalletsService {
+  // Health check endpoint to verify service availability and wallet system status
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse) {
+    option (google.api.http) = {get: "/v1/wallets/health"};
+  }
+
+  // Create a new digital wallet for a user with initial balance setup
+  rpc CreateWallet(CreateWalletRequest) returns (CreateWalletResponse) {
+    option (google.api.http) = {
+      post: "/v1/wallets"
+      body: "*"
+    };
+  }
+}
+
+// Health check request message - no parameters required
+message HealthCheckRequest {}
+
+// Health check response containing service status and wallet system health
+message HealthCheckResponse {
+  // Service status indicator including wallet backend health ("healthy", "degraded", "unhealthy")
+  string status = 1;
+}
+
+// Request message for creating a new digital wallet
+message CreateWalletRequest {
+  // Unique identifier for the user who will own this wallet (UUID format)
+  string user_id = 1;
+  // Initial balance amount to set in the wallet (base currency unit, e.g., dollars not cents)
+  double amount = 2;
+}
+
+// Response message for wallet creation operation
+message CreateWalletResponse {
+  // Operation status indicating wallet creation success or failure ("created", "failed", "pending")
+  string status = 1;
+  // Confirmed initial balance amount set in the wallet
+  double amount = 2;
+}
