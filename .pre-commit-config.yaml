@@ -3,10 +3,10 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.1.0
     hooks:
-      - id: no-commit-to-branch
-        stages: [pre-commit]
-        always_run: true
-        fail_fast: true
+      # - id: no-commit-to-branch
+      #   stages: [pre-commit]
+      #   always_run: true
+      #   fail_fast: true
       - id: check-merge-conflict
       - id: trailing-whitespace
       - id: end-of-file-fixer

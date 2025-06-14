@@ -9,7 +9,8 @@ default:
 # Start all services in background
 up: down temporal-setup monitoring-setup
 	@echo "Starting infrastructure services..."
-	@docker compose up -d mysql-db redis-cache temporal temporal-admin-tools temporal-ui prometheus grafana loki promtail frontend
+	@docker compose up -d mysql-db redis-cache temporal temporal-admin-tools temporal-ui prometheus grafana loki promtail
+# @docker compose up -d mysql-db redis-cache temporal temporal-admin-tools temporal-ui prometheus grafana loki promtail frontend
 	@echo "Waiting for services to be ready..."
 	@sleep 10  # Give services time to start
 	@echo "Setting up Temporal namespace..."
@@ -100,7 +101,7 @@ proto:
 	buf generate
 	@echo "Proto files generated successfully"
 	@echo "Creating softlink for api.swagger.json (for air hot reload, do not commit this file)..."
-	@ln -sf ../../packages/proto/pkg/proto/docs/swagger/api.swagger.json services/bff/api.swagger.json
+	@ln -sf ../../packages/proto/pkg/proto/docs/swagger/api.swagger.json services/adapterstripe/api.swagger.json
 	@make fmt
 
 
@@ -201,25 +202,11 @@ dbtool:
 
 dbtool-migrate:
 	@echo "Running migrations for all services..."
-	@bin/dbtool migrate up --uri "mysql://cinch:cinch@tcp(localhost:3306)/payments" --services payments
-	@bin/dbtool migrate up --uri "mysql://cinch:cinch@tcp(localhost:3306)/wallets" --services wallets
-	@bin/dbtool migrate up --uri "mysql://cinch:cinch@tcp(localhost:3306)/bff" --services bff
-	@bin/dbtool migrate up --uri "mysql://cinch:cinch@tcp(localhost:3306)/billing" --services billing
-	@bin/dbtool migrate up --uri "mysql://cinch:cinch@tcp(localhost:3306)/ledgers" --services ledgers
-	@bin/dbtool migrate up --uri "mysql://cinch:cinch@tcp(localhost:3306)/notifications" --services notifications
 	@bin/dbtool migrate up --uri "mysql://cinch:cinch@tcp(localhost:3306)/adapterstripe" --services adapterstripe
-	@bin/dbtool migrate up --uri "mysql://cinch:cinch@tcp(localhost:3306)/organisations" --services organisations
 
 dbtool-seed:
 	@echo "Running seeders for all services..."
-	@bin/dbtool seed --uri "mysql://cinch:cinch@tcp(localhost:3306)/payments" --services payments
-	@bin/dbtool seed --uri "mysql://cinch:cinch@tcp(localhost:3306)/wallets" --services wallets
-	@bin/dbtool seed --uri "mysql://cinch:cinch@tcp(localhost:3306)/bff" --services bff
-	@bin/dbtool seed --uri "mysql://cinch:cinch@tcp(localhost:3306)/billing" --services billing
-	@bin/dbtool seed --uri "mysql://cinch:cinch@tcp(localhost:3306)/ledgers" --services ledgers
-	@bin/dbtool seed --uri "mysql://cinch:cinch@tcp(localhost:3306)/notifications" --services notifications
 	@bin/dbtool seed --uri "mysql://cinch:cinch@tcp(localhost:3306)/adapterstripe" --services adapterstripe
-	@bin/dbtool seed --uri "mysql://cinch:cinch@tcp(localhost:3306)/organisations" --services organisations
 
 # Generate Swagger documentation from proto files
 swagger:

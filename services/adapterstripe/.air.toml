@@ -1,0 +1,42 @@
+#$schema=https://raw.githubusercontent.com/cosmtrek/air/master/air.schema.json
+
+# Set the root to current directory (inside adapterstripe service)
+root = "."
+testdata_dir = "testdata"
+tmp_dir = "tmp"
+
+# How to build and run the app
+[build]
+args_bin = []
+bin = "./tmp/main"
+cmd = "go build -mod=mod -o ./tmp/main ./cmd/main.go"
+delay = 1000
+exclude_dir = ["assets", "tmp", "vendor", "testdata"]
+exclude_file = []
+exclude_regex = ["_test.go"]
+exclude_unchanged = false
+follow_symlink = false
+full_bin = ""
+include_dir = []
+include_ext = ["go", "tpl", "tmpl", "html"]
+kill_delay = "0s"
+log = "build-errors.log"
+send_interrupt = false
+stop_on_error = true
+
+# Watch .go files only
+[watch]
+directories = ["."]
+exclude_dir = ["tmp", "vendor", "node_modules"]
+
+# Logging
+[log]
+time = true
+colors = true
+level = "debug"
+
+[misc]
+clean_on_exit = false
+
+[screen]
+clear_on_rebuild = false
