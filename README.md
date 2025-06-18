@@ -18,12 +18,14 @@ Implement a service that allows users to:
 
 - `POST /api/shortlinks`
   Creates a new short link
-  **Request:**
-  ```json
+
+**Request:**
+
+```json
   {
     "original_url": "https://example.com"
   }
-````
+```
 
 **Response:**
 
