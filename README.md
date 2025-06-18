@@ -14,30 +14,42 @@ Implement a service that allows users to:
 
 **Note: You are free to use gRPC or HTTP, your choice.  The provided template offers flexibility to use either.**
 
-### 2. RESTful Endpoints
+
+### 2. RESTful API Endpoints
 
 - `POST /api/shortlinks`
-  Creates a new short link
-
-**Request:**
-
-```json
+  Create a new short link
+  **Request:**
+  ```json
   {
     "original_url": "https://example.com"
   }
-```
+````
 
 **Response:**
 
 ```json
 {
-  "short_url": "http://localhost:8080/r/abc123"
+  "id": "abc123",
+  "short_url": "http://localhost:8080/shortlinks/abc123"
 }
 ```
 
-* `GET /r/{short_code}`
-  Redirects to the original URL
-  **Response:** 302 Found → `Location: original_url`
+* `GET /api/shortlinks/{id}`
+  Retrieve details of a short link
+  **Response:**
+
+  ```json
+  {
+    "id": "abc123",
+    "original_url": "https://example.com",
+    "created_at": "2024-01-01T12:00:00Z"
+  }
+  ```
+
+* `GET /shortlinks/{id}`
+  **Public redirect endpoint** – 302 redirect to the original URL
+  **Response:** HTTP 302 with `Location: original_url`
 
 
 ## 💾 Tech Stack
