@@ -17,14 +17,17 @@ Implement a service that allows users to:
 
 ### 2. RESTful API Endpoints
 
-- `POST /api/shortlinks`
-  Create a new short link
-  **Request:**
-  ```json
+`POST /api/shortlinks`
+
+Create a new short link
+
+**Request:**
+
+```json
   {
     "original_url": "https://example.com"
   }
-````
+```
 
 **Response:**
 
@@ -36,20 +39,23 @@ Implement a service that allows users to:
 ```
 
 * `GET /api/shortlinks/{id}`
-  Retrieve details of a short link
-  **Response:**
 
-  ```json
-  {
-    "id": "abc123",
-    "original_url": "https://example.com",
-    "created_at": "2024-01-01T12:00:00Z"
-  }
-  ```
+Retrieve details of a short link
+
+**Response:**
+
+```json
+{
+  "id": "abc123",
+  "original_url": "https://example.com",
+  "created_at": "2024-01-01T12:00:00Z"
+}
+```
 
 * `GET /shortlinks/{id}`
-  **Public redirect endpoint** – 302 redirect to the original URL
-  **Response:** HTTP 302 with `Location: original_url`
+
+**Public redirect endpoint** – 302 redirect to the original URL
+**Response:** HTTP 302 with `Location: original_url`
 
 
 ## 💾 Tech Stack
