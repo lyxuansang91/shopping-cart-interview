@@ -38,7 +38,7 @@ Create a new short link
 }
 ```
 
-* `GET /api/shortlinks/{id}`
+`GET /api/shortlinks/{id}`
 
 Retrieve details of a short link
 
@@ -52,7 +52,7 @@ Retrieve details of a short link
 }
 ```
 
-* `GET /shortlinks/{id}`
+`GET /shortlinks/{id}`
 
 **Public redirect endpoint** – 302 redirect to the original URL
 **Response:** HTTP 302 with `Location: original_url`
