@@ -361,4 +361,52 @@ func TestGetConfig(t *testing.T) {
 	os.Unsetenv("BASE_URL")
 	os.Unsetenv("LOG_LEVEL")
 	os.Unsetenv("ENABLE_CORS")
+}
+
+func TestShortenURL_DuplicateURL(t *testing.T) {
+	// Setup
+	e := echo.New()
+	config := &configs.Config{BaseURL: "http://localhost:8080"}
+	service := NewURLShortenerService(config)
+	
+	// First request
+	reqBody := ShortenRequest{
+		LongURL: "https://www.google.com",
+	}
+	jsonBody, _ := json.Marshal(reqBody)
+	
+	req1 := httptest.NewRequest(http.MethodPost, "/api/shortlinks", bytes.NewReader(jsonBody))
+	req1.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	rec1 := httptest.NewRecorder()
+	c1 := e.NewContext(req1, rec1)
+	
+	err := service.ShortenURL(c1)
+	assert.NoError(t, err)
+	assert.Equal(t, http.StatusCreated, rec1.Code)
+	
+	var response1 ShortenResponse
+	err = json.Unmarshal(rec1.Body.Bytes(), &response1)
+	assert.NoError(t, err)
+	firstID := response1.ID
+	
+	// Second request with same URL
+	req2 := httptest.NewRequest(http.MethodPost, "/api/shortlinks", bytes.NewReader(jsonBody))
+	req2.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	rec2 := httptest.NewRecorder()
+	c2 := e.NewContext(req2, rec2)
+	
+	err = service.ShortenURL(c2)
+	assert.NoError(t, err)
+	assert.Equal(t, http.StatusOK, rec2.Code) // Should return 200 OK for existing URL
+	
+	var response2 ShortenResponse
+	err = json.Unmarshal(rec2.Body.Bytes(), &response2)
+	assert.NoError(t, err)
+	
+	// Should return the same ID
+	assert.Equal(t, firstID, response2.ID)
+	assert.Equal(t, response1.ShortURL, response2.ShortURL)
+	
+	// Verify only one entry exists in the service
+	assert.Len(t, service.links, 1)
 } 

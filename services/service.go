@@ -23,6 +23,7 @@ type ShortLink struct {
 // URLShortenerService handles URL shortening operations
 type URLShortenerService struct {
 	links   map[string]*ShortLink // id -> ShortLink
+	urlToID map[string]string     // originalURL -> id (for duplicate detection)
 	mutex   sync.RWMutex
 	config  *configs.Config
 }
@@ -48,8 +49,9 @@ type ShortLinkDetailResponse struct {
 // NewURLShortenerService creates a new URL shortener service instance
 func NewURLShortenerService(config *configs.Config) *URLShortenerService {
 	return &URLShortenerService{
-		links:  make(map[string]*ShortLink),
-		config: config,
+		links:   make(map[string]*ShortLink),
+		urlToID: make(map[string]string),
+		config:  config,
 	}
 }
 
@@ -79,6 +81,16 @@ func (s *URLShortenerService) ShortenURL(c echo.Context) error {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
 
+	// Check if URL already exists
+	if existingID, exists := s.urlToID[req.LongURL]; exists {
+		shortURL := fmt.Sprintf("%s/shortlinks/%s", s.config.BaseURL, existingID)
+		return c.JSON(http.StatusOK, ShortenResponse{
+			ShortURL: shortURL,
+			ID:       existingID,
+		})
+	}
+
+	// Generate new short code
 	id := s.generateShortCode()
 	for _, exists := s.links[id]; exists; {
 		id = s.generateShortCode()
@@ -90,6 +102,7 @@ func (s *URLShortenerService) ShortenURL(c echo.Context) error {
 		CreatedAt:  time.Now().UTC(),
 	}
 	s.links[id] = shortLink
+	s.urlToID[req.LongURL] = id
 
 	shortURL := fmt.Sprintf("%s/shortlinks/%s", s.config.BaseURL, id)
 
