@@ -1,11 +1,2 @@
-bin/dbtool
-tmp/
-*.log
-terraform/.terraform
-.idea/
-terraform/tfvars/secrets.tfvars
-go.work.sum
-bastion-key.pem
-.DS_Store
-**/main
-!**/main.go
+.env
+shoping-cart-interview

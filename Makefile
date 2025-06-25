@@ -1,222 +1,95 @@
-.PHONY: default up down dev logs db clean fmt proto sqlc temporal-setup monitoring dbtool dbtool-migrate dbtool-seed test test-parallel pre-commit-install pre-commit-run fmt-proto
+# Variables
+PROJECT_NAME = url-shortener
+DOCKER_IMAGE = $(PROJECT_NAME):latest
+DOCKER_CONTAINER = $(PROJECT_NAME)-container
+PORT = 8080
 
-GATEWAY_MOD  := $(shell go list -m -f "{{.Dir}}" github.com/grpc-ecosystem/grpc-gateway/v2)
+# Default target
+.PHONY: help
+help:
+	@echo "Available commands:"
+	@echo "  make setup    - Setup the project (install dependencies)"
+	@echo "  make up       - Build and run Docker container"
+	@echo "  make down     - Stop and remove Docker container"
+	@echo "  make test     - Run tests"
+	@echo "  make clean    - Clean up build artifacts"
 
-# Default development shell
-default:
-	devbox shell
+# Setup the project
+.PHONY: setup
+setup:
+	@echo "Setting up the project..."
+	go mod tidy
+	@echo "Project setup complete!"
 
-# Start all services in background
-up: down temporal-setup monitoring-setup
-	@echo "Starting infrastructure services..."
-	@docker compose up -d mysql-db redis-cache temporal temporal-admin-tools temporal-ui prometheus grafana loki promtail
-# @docker compose up -d mysql-db redis-cache temporal temporal-admin-tools temporal-ui prometheus grafana loki promtail frontend
-	@echo "Waiting for services to be ready..."
-	@sleep 10  # Give services time to start
-	@echo "Setting up Temporal namespace..."
-	@docker compose exec -T temporal-admin-tools tctl --ns default namespace describe > /dev/null 2>&1 || \
-		docker compose exec -T temporal-admin-tools tctl --ns default namespace register > /dev/null 2>&1
-	@echo "Running database migrations and seeders..."
-	@make dbtool
-	@make dbtool-migrate
-	@sleep 5
-	@make dbtool-seed
-	@echo "Starting Go services with Air..."
-	@GOWORK=off ./scripts/start-services.sh
+# Build and run Docker container
+.PHONY: up
+up:
+	@echo "Building and starting Docker container..."
+	docker build -t $(DOCKER_IMAGE) .
+	docker run -d --name $(DOCKER_CONTAINER) -p $(PORT):8080 $(DOCKER_IMAGE)
+	@echo "Container started! Service available at http://localhost:$(PORT)"
 
-# Setup monitoring requirements
-monitoring-setup:
-	@echo "Setting up monitoring requirements..."
-	@mkdir -p config/prometheus
-	@mkdir -p config/grafana/provisioning/datasources
-	@mkdir -p config/grafana/provisioning/dashboards
-	@mkdir -p config/promtail
-
-# Setup Temporal requirements
-temporal-setup:
-	@echo "Setting up Temporal requirements..."
-	@mkdir -p config/dynamicconfig
-	@chmod +x ./scripts/init-temporal-db.sh
-
-# Development mode with live reload and logs
-dev: down
-	@echo "Starting in development mode with live reload..."
-	@GOWORK=off ./scripts/start-services.sh
-
-# Stop and remove all services
+# Stop and remove Docker container
+.PHONY: down
 down:
-	@echo "Stopping all services..."
-	@docker-compose down -v
-	@echo "Killing any running Air and main processes..."
-	@pkill -f "air -c" || true
-	@echo "Waiting for ports to be released..."
-	@sleep 3
-	@echo "Killing processes on configured HTTP and gRPC ports..."
-	@for service in services/*; do \
-		if [ -f "$$service/.env.local" ]; then \
-			http_port=$$(grep "HTTP_PORT=" $$service/.env.local | cut -d'=' -f2); \
-			grpc_port=$$(grep "GRPC_PORT=" $$service/.env.local | cut -d'=' -f2); \
-			if [ ! -z "$$http_port" ]; then \
-				lsof -ti:$$http_port | xargs kill -9 2>/dev/null || true; \
-			fi; \
-			if [ ! -z "$$grpc_port" ]; then \
-				lsof -ti:$$grpc_port | xargs kill -9 2>/dev/null || true; \
-			fi; \
-		fi; \
-	done
-	@echo "All services stopped and ports released successfully."
+	@echo "Stopping and removing Docker container..."
+	-docker stop $(DOCKER_CONTAINER)
+	-docker rm $(DOCKER_CONTAINER)
+	@echo "Container stopped and removed!"
 
-# View logs (usage: make logs service=payments-service)
-logs:
-	docker compose logs -f $(service)
-
-# Start only the database
-db:
-	docker compose up -d mysql-db
-
-# Clean temporary files
-clean:
-	rm -rf services/*/tmp/*
-	docker-compose down -v
-	docker volume rm go-mod-cache || true
-
-# Format all Go code
-fmt:
-	@echo "Formatting Go code..."
-	@find . -type f -name "go.mod" -exec dirname {} \; | while read dir; do \
-		echo "Running go mod tidy and formatting in $$dir"; \
-		(cd $$dir && GOWORK=off go mod tidy && go fmt ./...); \
-	done
-	@which goimports >/dev/null 2>&1 || go install golang.org/x/tools/cmd/goimports@latest
-	@goimports -w ./services ./packages
-
-# Generate gRPC and protobuf Go files for all services
-
-proto:
-	@echo "Cleaning up existing generated files..."
-	@rm -rf packages/proto/pkg/proto/*
-	@make fmt-proto
-	@echo "Generating gRPC and protobuf Go files..."
-	@cd packages/proto && \
-	buf dep update && \
-	buf generate
-	@echo "Proto files generated successfully"
-	@echo "Creating softlink for api.swagger.json (for air hot reload, do not commit this file)..."
-	@ln -sf ../../packages/proto/pkg/proto/docs/swagger/api.swagger.json services/cart/api.swagger.json
-	@make fmt
-
-
-# Generate sqlc code for all services
-sqlc:
-	@echo "Cleaning up existing generated files..."
-	@find services -name "sqlc.yaml" -exec dirname {} \; | while read dir; do \
-		echo "Cleaning generated files in $$dir/internal/pkg/db"; \
-		rm -rf $$dir/internal/pkg/db/*; \
-	done
-	@echo "Generating sqlc code for all services..."
-	@find services -name "sqlc.yaml" -exec dirname {} \; | while read dir; do \
-		echo "Running sqlc generate in $$dir"; \
-		(cd $$dir && GOWORK=off sqlc generate 2>&1 | grep -v "no queries contained in paths" || true); \
-	done
-
-# Parallel run tests for all packages and services
-test-parallel:
-	@echo "Running tests for all packages and services in parallel..."
-	@find . -mindepth 1 -type f -name "go.mod" -exec dirname {} \; | \
-		grep -v '^.$$' | \
-		xargs -I{} -P 8 sh -c '\
-			echo "→ Running tests in {}"; \
-			cd "{}"; \
-			if go list ./... | grep -q .; then \
-				GOWORK=off go test -v -cover ./...; \
-			else \
-				echo "⚡ No tests to run in {}"; \
-			fi \
-		'
-
-# Run tests for all packages and services
+# Run tests
+.PHONY: test
 test:
-	@echo "Running tests for all packages and services..."
-	@set -e; \
-	for dir in $$(find . -mindepth 1 -type f -name "go.mod" -exec dirname {} \;); do \
-		echo "→ Running tests in $$dir"; \
-		cd $$dir; \
-		if go list ./... | grep -q .; then \
-			GOWORK=off go test -v -cover ./...; \
-		else \
-			echo "⚡ No tests to run in $$dir"; \
-		fi; \
-		cd - >/dev/null; \
-	done
+	@echo "Running tests..."
+	go test ./... -v
+	@echo "Tests completed!"
 
-# Install pre-commit hooks
-pre-commit-install:
-	@echo "Installing pre-commit hooks..."
-	@pre-commit install
+# Run tests with coverage
+.PHONY: test-coverage
+test-coverage:
+	@echo "Running tests with coverage..."
+	go test ./... -v -cover
+	@echo "Tests with coverage completed!"
 
-# Run pre-commit hooks on all files
-pre-commit-run:
-	make pre-commit-install
-	@echo "Running pre-commit hooks..."
-	@pre-commit run --all-files
+# Run tests with race detection
+.PHONY: test-race
+test-race:
+	@echo "Running tests with race detection..."
+	go test ./... -v -race
+	@echo "Tests with race detection completed!"
 
-# The following are internal targets; Do not use them directly --------------
+# Clean up build artifacts
+.PHONY: clean
+clean:
+	@echo "Cleaning up build artifacts..."
+	-docker rmi $(DOCKER_IMAGE)
+	@echo "Cleanup completed!"
 
-# Helper target to wait for database
-wait-for-db:
-	@echo "Waiting for database to be ready..."
-	@until docker compose exec mysql-db mysqladmin ping -h localhost -u root -proot --silent; do \
-		echo "Waiting for MySQL..."; \
-		sleep 2; \
-	done
+# Restart the service (down + up)
+.PHONY: restart
+restart: down up
 
-# Add these new targets for Temporal convenience
-temporal-ui:
-	@echo "Opening Temporal UI in browser..."
-	@open http://localhost:8088
+# Show logs
+.PHONY: logs
+logs:
+	@echo "Showing container logs..."
+	docker logs -f $(DOCKER_CONTAINER)
 
-temporal-cli:
-	@echo "Running Temporal CLI..."
-	docker compose exec temporal-admin-tools tctl
+# Show container status
+.PHONY: status
+status:
+	@echo "Container status:"
+	docker ps -a --filter name=$(DOCKER_CONTAINER)
 
-temporal-namespace:
-	@echo "Creating default namespace..."
-	docker compose exec temporal-admin-tools tctl --ns default namespace register
+# Run the service locally (without Docker)
+.PHONY: run
+run:
+	@echo "Running service locally..."
+	go run main.go
 
-# Monitoring convenience targets
-grafana:
-	@echo "Opening Grafana in browser..."
-	@open http://localhost:3000
-
-prometheus:
-	@echo "Opening Prometheus in browser..."
-	@open http://localhost:9090
-
-monitoring-logs:
-	@echo "Viewing monitoring stack logs..."
-	docker compose logs -f prometheus grafana loki
-
-# Database tool targets
-dbtool:
-	@echo "Building database tool..."
-	@cd packages/dbtool && GOWORK=off go build -o ../../bin/dbtool ./cmd/dbtool
-
-dbtool-migrate:
-	@echo "Running migrations for all services..."
-	@bin/dbtool migrate up --uri "mysql://cinch:cinch@tcp(localhost:3306)/cart" --services cart
-
-dbtool-seed:
-	@echo "Running seeders for all services..."
-	@bin/dbtool seed --uri "mysql://cinch:cinch@tcp(localhost:3306)/cart" --services cart
-
-# Generate Swagger documentation from proto files
-swagger:
-	@echo "Generating Swagger documentation..."
-	@cd packages/proto && \
-		buf dep update && \
-		buf generate
-
-fmt-proto:
-	@echo "Formatting proto files..."
-	@cd packages/proto && \
-		buf format -w .
+# Install dependencies only
+.PHONY: deps
+deps:
+	@echo "Installing dependencies..."
+	go mod download
+	@echo "Dependencies installed!" 
