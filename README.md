@@ -6,20 +6,36 @@ A simple URL shortener service built with [Echo](https://echo.labstack.com/) in 
 
 - Generate short URLs from long URLs
 - Redirect short URLs to original long URLs
+- Handle duplicate URLs by returning existing short codes
 - Thread-safe in-memory storage
 - RESTful API
 - Comprehensive unit tests
 - Docker containerization
 - Makefile automation
-- Environment-based configuration
+- Environment-based configuration with Viper
+- Support for .env files
+
+## Project Structure
+
+```
+.
+├── configs/           # Configuration management
+│   ├── config.go      # Viper-based config loading
+│   └── config_test.go # Config unit tests
+├── services/          # Business logic
+│   ├── service.go     # URL shortener service
+│   └── service_test.go # Service unit tests
+├── main.go           # Application entry point
+├── Makefile          # Build and deployment automation
+├── Dockerfile        # Container configuration
+├── go.mod            # Go module definition
+├── go.sum            # Dependency checksums
+└── README.md         # This file
+```
 
 ## Configuration
 
-The service can be configured using environment variables. Copy `env.example` to `.env` and modify as needed:
-
-```bash
-cp env.example .env
-```
+The service uses [Viper](https://github.com/spf13/viper) for configuration management, supporting both `.env` files and environment variables. Environment variables take precedence over `.env` file values.
 
 ### Environment Variables
 
@@ -30,7 +46,9 @@ cp env.example .env
 | `LOG_LEVEL`   | `info`                  | Logging level (debug, info, warn, error) |
 | `ENABLE_CORS` | `true`                  | Enable CORS middleware (true/false)      |
 
-### Example Configuration
+### Example .env File
+
+Create a `.env` file in the project root:
 
 ```bash
 # Production settings
@@ -60,7 +78,7 @@ Request Body:
 }
 ```
 
-Response:
+Response (New URL - 201 Created):
 
 ```json
 {
@@ -69,10 +87,20 @@ Response:
 }
 ```
 
-### 2. Redirect to Long URL
+Response (Duplicate URL - 200 OK):
+
+```json
+{
+  "short_url": "http://localhost:8080/shortlinks/abc123",
+  "id": "abc123"
+}
+```
+
+### 2. Get Short Link Details
 
 **GET** `/api/shortlinks/{id}`
-Retrieve details of a short link
+
+Response:
 
 ```json
 {
@@ -82,9 +110,23 @@ Retrieve details of a short link
 }
 ```
 
+### 3. Redirect to Long URL
+
 **GET** `/shortlinks/{id}`
 
-Public redirect endpoint – 302 redirect to the original URL Response: HTTP 302 with Location: original_url
+Public redirect endpoint – 302 redirect to the original URL
+
+### 4. Health Check
+
+**GET** `/health`
+
+Response:
+
+```json
+{
+  "status": "healthy"
+}
+```
 
 ## Quick Start with Makefile
 
@@ -128,10 +170,13 @@ make run
 make down
 ```
 
-### Running Tests
+### Building and Testing
 
 ```bash
-# Run all tests
+# Build the application
+go build
+
+# Run all tests across all packages
 make test
 
 # Run tests with coverage
@@ -139,6 +184,10 @@ make test-coverage
 
 # Run tests with race detection
 make test-race
+
+# Run tests for specific packages
+go test ./configs -v
+go test ./services -v
 ```
 
 ## Complete Makefile Commands
@@ -149,7 +198,7 @@ make test-race
 make setup    # Setup the project (install dependencies)
 make up       # Build and run Docker container
 make down     # Stop and remove Docker container
-make test     # Run tests
+make test     # Run all tests across all packages
 make clean    # Clean up build artifacts
 ```
 
@@ -198,14 +247,18 @@ make down
 ### 3. Testing
 
 ```bash
-# Run basic tests
-make test
+# Run all tests
+go test ./... -v
+
+# Run tests for specific packages
+go test ./configs -v
+go test ./services -v
 
 # Run tests with coverage
-make test-coverage
+go test ./... -v -cover
 
-# Run tests with race detection (for concurrency issues)
-make test-race
+# Run tests with race detection
+go test ./... -v -race
 ```
 
 ## Manual Setup (Alternative)
@@ -216,7 +269,12 @@ If you prefer not to use the Makefile:
 
 ```bash
 go mod tidy
-cd services && go mod tidy
+```
+
+### Build the application
+
+```bash
+go build
 ```
 
 ### Run the service
@@ -228,7 +286,18 @@ go run main.go
 ### Run tests
 
 ```bash
+# Run all tests
+go test ./... -v
+
+# Run tests for specific packages
+go test ./configs -v
 go test ./services -v
+
+# Run tests with coverage
+go test ./... -v -cover
+
+# Run tests with race detection
+go test ./... -v -race
 ```
 
 The service will start on the port specified in the `PORT` environment variable (default: 8080)
@@ -236,6 +305,14 @@ The service will start on the port specified in the `PORT` environment variable 
 ## Example Usage
 
 **Shorten a URL:**
+
+```bash
+curl -X POST http://localhost:8080/api/shortlinks \
+  -H "Content-Type: application/json" \
+  -d '{"long_url": "https://www.google.com"}'
+```
+
+**Shorten the same URL again (returns existing short code):**
 
 ```bash
 curl -X POST http://localhost:8080/api/shortlinks \
@@ -286,7 +363,8 @@ docker rm url-shortener-container
 ## Notes
 
 - This service uses in-memory storage. All data will be lost when the service restarts.
+- Duplicate URLs are handled efficiently - the same URL will always return the same short code.
 - For production, consider using a persistent database and adding authentication, rate limiting, and HTTPS.
 - The Docker image uses Alpine Linux for a smaller footprint and better security.
 - The service runs as a non-root user inside the container for security.
-- Environment variables can be set in a `.env` file or passed directly to the container.
+- Configuration supports both `.env` files and environment variables, with environment variables taking precedence.
