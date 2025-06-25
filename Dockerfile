@@ -9,11 +9,11 @@ RUN apk add --no-cache git ca-certificates
 
 # Copy go mod files
 COPY go.mod go.sum ./
-COPY services/go.mod services/go.sum ./services/
+# COPY services/go.mod services/go.sum ./services/
 
 # Download dependencies
 RUN go mod download
-RUN cd services && go mod download
+# RUN cd services && go mod download
 
 # Copy source code
 COPY . .
